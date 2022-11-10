@@ -21,7 +21,7 @@
         "_value": false
       },
       "3d": {
-        "_value": false
+        "_value": true
       },
       "2d": {
         "_value": true
@@ -62,7 +62,7 @@
         "_value": false
       },
       "primitive": {
-        "_value": false
+        "_value": true
       },
       "profiler": {
         "_value": false
@@ -101,11 +101,13 @@
     "flags": {},
     "includeModules": [
       "2d",
+      "3d",
       "animation",
       "audio",
       "base",
       "gfx-webgl",
       "gfx-webgl2",
+      "primitive",
       "tween",
       "ui"
     ],

@@ -23,7 +23,11 @@ export class ColorGame extends Component {
     tipsPrefab: Prefab = null;
     _totalIndex = 0;
     _rightCount = 0;
+
     _tipsCount = 0;
+    _tipsTime = 6;
+    _tipsStep = 0.1;
+    _tipsMinTime = 1.5;
     start() {
         setDisplayStats(false)
         this.onInit()
@@ -46,6 +50,7 @@ export class ColorGame extends Component {
         this.playNext();
     }
     reset() {
+        this._tipsTime = 10;
         this.gameOver.active = false;
         this._totalIndex = 0;
         this._rightCount = 1;
@@ -106,6 +111,7 @@ export class ColorGame extends Component {
         input.on(Input.EventType.TOUCH_START, finishTips);
         node.on(Input.EventType.TOUCH_START, finishTips)
     }
+    _bigColorNode: Node = null;
     private createBigColor(buttonCount, color, cb) {
         let size: math.Size = view.getVisibleSize();
         let node = instantiate(this.item);
@@ -119,6 +125,7 @@ export class ColorGame extends Component {
         tween().target(transform).to(0.3, { height: height }, { easing: "fade" }).call(() => {
             cb && cb();
         }).start();
+        this._bigColorNode = node;
     }
     private getRandomColor() {
         const r = math.randomRangeInt(0, 255)
@@ -147,6 +154,7 @@ export class ColorGame extends Component {
             sprite.color = colors[i];
             this.gameNode.addChild(node);
             const curColor = colors[i];
+
             node.on(Input.EventType.TOUCH_START, () => {
                 const audioSource = this.getComponent(AudioSource);
                 // audioSource.clip = this.click;
@@ -156,8 +164,15 @@ export class ColorGame extends Component {
             });
             x += btnWidth;
         }
+        this._tipsTime -= this._tipsStep;
+        if (this._tipsTime <= this._tipsMinTime) {
+            this._tipsTime = this._tipsMinTime;
+        }
+        tween().target(this._bigColorNode.getComponent(UITransform)).to(this._tipsTime, { height: 0 }).call(() => {
+            this.onGameOver()
+            this.gameNode.destroyAllChildren()
+        }).start();
     }
-
     update(deltaTime: number) {
 
     }
