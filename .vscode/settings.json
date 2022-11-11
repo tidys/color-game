@@ -1,0 +1,24 @@
+{
+    "typescript.workspaceSymbols.scope": "allOpenProjects",
+    "workbench.editor.navigationScope": "default",
+    "files.exclude": {
+        "**/*.meta": true,
+        "**/*.prefab": true,
+        "**/*.scene": true,
+        "**/*.jpg": true,
+        "**/*.mp3": true,
+        "**/*.mtl": true,
+        "**/*.png": true,
+        "**/*.jpeg": true,
+        "library": true,
+        "local": true,
+        "profiles": true,
+        "settings": true,
+        "temp": true,
+        "hot-update-tools": true,
+        ".idea": true,
+        ".creator": true,
+        "build": true,
+        ".DS_Store":true,
+    }
+}
