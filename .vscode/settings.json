@@ -20,5 +20,6 @@
         ".creator": true,
         "build": true,
         ".DS_Store":true,
+        ".vscode":true,
     }
 }

@@ -2,12 +2,12 @@
   "ver": "1.1.38",
   "importer": "prefab",
   "imported": true,
-  "uuid": "a489ab24-f7ea-4256-97a8-fdf752c5fde7",
+  "uuid": "0e59482d-c4fc-4541-a056-a5f60f59b514",
   "files": [
     ".json"
   ],
   "subMetas": {},
   "userData": {
-    "syncNodeName": "Item"
+    "syncNodeName": "Tips"
   }
 }
