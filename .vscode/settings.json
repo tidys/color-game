@@ -21,5 +21,6 @@
         "build": true,
         ".DS_Store":true,
         ".vscode":true,
-    }
+    },
+    "editor.formatOnSave": true
 }
