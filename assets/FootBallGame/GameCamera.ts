@@ -1,4 +1,4 @@
-import { _decorator, Component, Node, input, Input, KeyCode, EventKeyboard, Enum, Vec2, EventMouse, UITransform, Quat, TERRAIN_HEIGHT_BASE } from 'cc';
+import { _decorator, Component, Node, input, Input, KeyCode, EventKeyboard, Enum, Vec2, EventMouse, UITransform, Quat, TERRAIN_HEIGHT_BASE, Vec3 } from 'cc';
 const { ccclass, property } = _decorator;
 
 enum Horizontal {
@@ -34,17 +34,24 @@ export class GameCamera extends Component {
 
     offset = new Vec2();
 
-
     start() {
         input.on(Input.EventType.KEY_DOWN, (event: EventKeyboard) => {
             if (event.keyCode === KeyCode.KEY_W) {
-                this.vertical = Vertical.Front;
+                if (this.vertical === Vertical.None) {
+                    this.vertical = Vertical.Front;
+                }
             } else if (event.keyCode === KeyCode.KEY_S) {
-                this.vertical = Vertical.Back;
+                if (this.vertical === Vertical.None) {
+                    this.vertical = Vertical.Back;
+                }
             } else if (event.keyCode === KeyCode.KEY_A) {
-                this.horizontal = Horizontal.Left;
+                if (this.horizontal === Horizontal.None) {
+                    this.horizontal = Horizontal.Left;
+                }
             } else if (event.keyCode === KeyCode.KEY_D) {
-                this.horizontal = Horizontal.Right;
+                if (this.horizontal === Horizontal.None) {
+                    this.horizontal = Horizontal.Right;
+                }
             } else if (event.keyCode === KeyCode.SPACE) {
 
             }
@@ -91,29 +98,44 @@ export class GameCamera extends Component {
     }
     _updateWithFree() {
         let position = this.node.getPosition();
+        let forward = this.node.forward;
 
+        let verticalVec = new Vec2();
         switch (this.vertical) {
             case Vertical.Back: {
-                position.z += this.speed;
+                verticalVec.x = forward.x;
+                verticalVec.y = forward.z;
+                verticalVec.rotate(Math.PI);
                 break;
             }
             case Vertical.Front: {
-                position.z -= this.speed;
-
+                verticalVec.x = forward.x;
+                verticalVec.y = forward.z;
+                verticalVec.rotate(0);
                 break
             }
         }
+
+        let horizonalVec = new Vec2();
         switch (this.horizontal) {
             case Horizontal.Left: {
-                position.x -= this.speed;
+                horizonalVec.x = forward.x;
+                horizonalVec.y = forward.z;
+                horizonalVec.rotate(-Math.PI / 2);
                 break;
             }
             case Horizontal.Right: {
-                position.x += this.speed;
+                horizonalVec.x = forward.x;
+                horizonalVec.y = forward.z;
+                horizonalVec.rotate(Math.PI / 2);
                 break;
             }
         }
-        this.node.setPosition(position);
+        let directionVec = horizonalVec.normalize().add(verticalVec.normalize());
+        if (!directionVec.equals2f(0, 0)) {
+            position.add(new Vec3(directionVec.x, 0, directionVec.y).multiplyScalar(this.speed));
+            this.node.setPosition(position);
+        }
     }
     _updateWithTarget() {
         if (this.flowTarget) {
