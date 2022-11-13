@@ -1,4 +1,4 @@
-import { _decorator, Component, Node, Input, input, EventKeyboard, KeyCode } from 'cc';
+import { _decorator, Component, Node, Input, input, EventKeyboard, KeyCode, RigidBody, Vec3 } from 'cc';
 
 const { ccclass, property } = _decorator;
 
@@ -20,9 +20,16 @@ export class Role extends Component {
     isWalking = false;
     horizontal: Horizontal = Horizontal.None;
     vertical: Vertical = Vertical.None;
-    speed = 1;
+    speed = 0.1;
 
     start() {
+        input.on(Input.EventType.KEY_DOWN, (event: EventKeyboard) => {
+            if (event.keyCode === KeyCode.KEY_Q) {
+
+                let rigidBody = this.getComponent(RigidBody);
+                rigidBody.applyForce(new Vec3(300, 100, 0));
+            }
+        });
         input.on(Input.EventType.KEY_DOWN, (event: EventKeyboard) => {
             if (event.keyCode === KeyCode.KEY_W) {
                 this.vertical = Vertical.Front;
@@ -50,22 +57,22 @@ export class Role extends Component {
 
         switch (this.vertical) {
             case Vertical.Back: {
-                position.z++;
+                position.z += this.speed;
                 break;
             }
             case Vertical.Front: {
-                position.z--;
+                position.z -= this.speed;
 
                 break
             }
         }
         switch (this.horizontal) {
             case Horizontal.Left: {
-                position.x--;
+                position.x -= this.speed;
                 break;
             }
             case Horizontal.Right: {
-                position.x++;
+                position.x += this.speed;
                 break;
             }
         }
