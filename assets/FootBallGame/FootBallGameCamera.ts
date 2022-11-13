@@ -32,6 +32,8 @@ export class GameCamera extends Component {
     vertical: Vertical = Vertical.None;
     speed = 0.1;
 
+    enabledFunc = false;
+
     offset = new Vec2();
 
     start() {
@@ -54,6 +56,14 @@ export class GameCamera extends Component {
                 }
             } else if (event.keyCode === KeyCode.SPACE) {
 
+            } else if (event.keyCode === KeyCode.KEY_Q) {
+                this.enabledFunc = !this.enabledFunc;
+                if (this.enabledFunc) {
+                    console.log("摄像机功能启用")
+                } else {
+                    console.log("摄像机功能禁用")
+
+                }
             }
         })
         input.on(Input.EventType.KEY_UP, (event: EventKeyboard) => {
@@ -70,7 +80,7 @@ export class GameCamera extends Component {
             turnArroundEye = true;
         });
         input.on(Input.EventType.MOUSE_MOVE, (event: EventMouse) => {
-            if (turnArroundEye) {
+            if (turnArroundEye && this.enabledFunc) {
                 let rotateSpeed = 0.2;
                 let angleBase = this.node.eulerAngles;
                 let quatTemp = new Quat();
@@ -82,18 +92,22 @@ export class GameCamera extends Component {
             turnArroundEye = false;
         });
         input.on(Input.EventType.MOUSE_WHEEL, (event: EventMouse) => {
-            let x = event.getScrollY();
-            let dis = this.node.forward.normalize().multiplyScalar(x * 0.01);
-            let transform = this.node.getComponent(UITransform);
-            this.node.setPosition(this.node.getPosition().add(dis));
+            if (this.enabledFunc) {
+                let x = event.getScrollY();
+                let dis = this.node.forward.normalize().multiplyScalar(x * 0.01);
+                let transform = this.node.getComponent(UITransform);
+                this.node.setPosition(this.node.getPosition().add(dis));
+            }
         });
     }
 
     update(deltaTime: number) {
-        if (this.type === Type.FlowTarget) {
-            this._updateWithTarget();
-        } else if (this.type === Type.FreeMove) {
-            this._updateWithFree();
+        if (this.enabledFunc) {
+            if (this.type === Type.FlowTarget) {
+                this._updateWithTarget();
+            } else if (this.type === Type.FreeMove) {
+                this._updateWithFree();
+            }
         }
     }
     _updateWithFree() {
