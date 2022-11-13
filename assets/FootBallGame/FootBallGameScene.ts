@@ -17,8 +17,11 @@ export class SceneComponent extends Component {
     ball: Ball = null;
     start() {
         footBallGame.setFootBall(this.ball);
+        footBallGame.reset()
     }
+    onLoad() {
 
+    }
     update(deltaTime: number) {
         if (this.camera && this.role) {
             let pox = this.role.node.getPosition();

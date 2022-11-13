@@ -1,5 +1,7 @@
-import { _decorator, Component, Node, BoxCollider, SphereCollider, physics, RigidBody, Vec3, math, input, Input, Camera, EventTouch, geometry, PhysicsSystem, UITransform, Prefab, instantiate, Mat3, Mat4, tween, EventKeyboard, KeyCode, Quat } from 'cc';
+import { _decorator, Component, Node, BoxCollider, SphereCollider, physics, RigidBody, Vec3, math, input, Input, Camera, EventTouch, geometry, PhysicsSystem, UITransform, Prefab, instantiate, Mat3, Mat4, tween, EventKeyboard, KeyCode, Quat, game } from 'cc';
+import { footBallGame, GameState } from '../FootBallGame';
 import { FootBallGameData } from '../FootBallGameData';
+import { Msg } from '../Msg';
 const { ccclass, property } = _decorator;
 
 @ccclass('Ball')
@@ -13,14 +15,19 @@ export class Ball extends Component {
     preNode: Node = null;
 
     resetPosition() {
-        this.node.setPosition(new Vec3(0, 2, 0));
+        this.node.setPosition(new Vec3(0, 12, 0));
         let rigidBody = this.node.getComponent(RigidBody);
         if (rigidBody) {
             rigidBody.clearVelocity()
             rigidBody.clearForces();
         }
     }
-    start() {
+    onLoad() {
+        game.on(Msg.ResetGame, () => {
+            this.resetPosition();
+        })
+
+
         let rigidBody = this.getComponent(RigidBody);
         input.on(Input.EventType.TOUCH_START, (event: EventTouch) => {
             let ray = new geometry.Ray();
@@ -31,7 +38,7 @@ export class Ball extends Component {
                 if (result.collider.node === this.node) {
                     let force = new Vec3(0, 0.4, -1);
                     force.normalize().multiplyScalar(FootBallGameData.Force);
-
+                    footBallGame.setGameState(GameState.BallMoving);
                     rigidBody.applyForce(force);
                 }
             }
@@ -52,8 +59,14 @@ export class Ball extends Component {
         }
     }
 
-    update(deltaTime: number) {
 
+    update(deltaTime: number) {
+        let rigidBody = this.node.getComponent(RigidBody);
+        if (rigidBody.isSleeping) {
+            if (footBallGame.getGameState() === GameState.BallMoving) {
+                footBallGame.failed()
+            }
+        }
     }
 }
 

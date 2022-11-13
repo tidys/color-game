@@ -10,7 +10,7 @@
   },
   {
     "__type__": "cc.Scene",
-    "_name": "FootBallGame",
+    "_name": "FootBallGameScene",
     "_objFlags": 0,
     "_parent": null,
     "_children": [
@@ -428,7 +428,7 @@
     "_lpos": {
       "__type__": "cc.Vec3",
       "x": 0,
-      "y": 2.506,
+      "y": 4.225,
       "z": 0
     },
     "_lrot": {
@@ -465,7 +465,7 @@
     "_visFlags": 0,
     "_materials": [
       {
-        "__uuid__": "d3c7820c-2a98-4429-8bc7-b8453bc9ac41",
+        "__uuid__": "37c67218-48f2-4e94-8616-1ed88bde006c",
         "__expectedType__": "cc.Material"
       }
     ],
@@ -693,7 +693,7 @@
     "_id": "4dwvm34AlDnKWYNwE+VLAq"
   },
   {
-    "__type__": "cc.BoxCollider",
+    "__type__": "cc.PlaneCollider",
     "_name": "",
     "_objFlags": 0,
     "node": {
@@ -709,13 +709,14 @@
       "y": 0,
       "z": 0
     },
-    "_size": {
+    "_normal": {
       "__type__": "cc.Vec3",
-      "x": 10,
-      "y": 0.1,
-      "z": 10
+      "x": 0,
+      "y": 1,
+      "z": 0
     },
-    "_id": "fet9dBnBxN7YnZYyUSBQen"
+    "_constant": 0,
+    "_id": "8a4zZst61LjprsT2B3UBDT"
   },
   {
     "__type__": "cc.Node",

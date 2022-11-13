@@ -1,5 +1,6 @@
-import { _decorator, Component, Node } from 'cc';
-import { footBallGame } from '../FootBallGame';
+import { _decorator, Component, Node, game } from 'cc';
+import { FootBallGame, footBallGame } from '../FootBallGame';
+import { Msg } from '../Msg';
 const { ccclass, property } = _decorator;
 
 @ccclass('GameUtils')
@@ -12,7 +13,6 @@ export class GameUtils extends Component {
     }
     onResetBallPositon() {
         footBallGame.reset()
-        footBallGame.getFootBall()?.resetPosition();
     }
     update(deltaTime: number) {
 

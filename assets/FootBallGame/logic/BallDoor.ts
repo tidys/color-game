@@ -1,5 +1,6 @@
-import { _decorator, Component, Node, BoxCollider, CCBoolean } from 'cc';
+import { _decorator, Component, Node, BoxCollider, CCBoolean, game } from 'cc';
 import { footBallGame } from '../FootBallGame';
+import { Msg } from '../Msg';
 const { ccclass, property } = _decorator;
 
 @ccclass('BallDoor')
@@ -8,13 +9,13 @@ export class BallDoor extends Component {
     collider: BoxCollider = null;
     @property(CCBoolean)
     isTrigger = false;
-    start() {
-        this.collider.isTrigger = this.isTrigger;
-        this.collider.on("onTriggerEnter", () => {
-            this.onShootingIn();
-        })
-        this.collider.on("onCollisionEnter", () => {
-            this.onShootingIn()
+    onLoad() {
+        game.on(Msg.ResetGame, () => {
+            this.collider.isTrigger = this.isTrigger;
+            this.collider.off("onCollisionEnter", this.onShootingIn, this)
+            this.collider.off("onTriggerEnter", this.onShootingIn, this)
+            this.collider.on("onCollisionEnter", this.onShootingIn, this)
+            this.collider.on("onTriggerEnter", this.onShootingIn, this)
         })
     }
 
@@ -22,6 +23,9 @@ export class BallDoor extends Component {
 
     }
     onShootingIn() {
+        this.collider.off("onCollisionEnter", this.onShootingIn, this)
+        this.collider.off("onTriggerEnter", this.onShootingIn, this)
+
         footBallGame.shootingIn();
     }
 }
