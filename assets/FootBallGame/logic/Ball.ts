@@ -83,6 +83,9 @@ export class Ball extends Component {
                 const touchVec2 = new Vec2(result.hitPoint.x, result.hitPoint.z);
                 let vec = arrowPosVec2.subtract(touchVec2);
                 this.arrowNode.forward = new Vec3(vec.x, 0, vec.y);
+                const scale = this.arrowNode.getScale();
+                scale.z = vec.length();
+                this.arrowNode.setScale(scale);
             }
 
         };
