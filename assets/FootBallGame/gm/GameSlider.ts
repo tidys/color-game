@@ -1,4 +1,4 @@
-import { _decorator, Component, Node, Slider, Label, CCInteger } from 'cc';
+import { _decorator, Component, Node, Slider, Label, CCInteger, lerp } from 'cc';
 import { FootBallGameData } from '../FootBallGameData';
 const { ccclass, property } = _decorator;
 
@@ -7,25 +7,33 @@ export class GameSlider extends Component {
     @property(Label)
     label: Label = null;
     @property(CCInteger)
+    minValue = 0;
+
+    @property(CCInteger)
     maxValue = 10000;
+
+    @property(CCInteger)
+    fixed = 0;
+
     start() {
         this._updateLabel()
     }
 
-    update(deltaTime: number) {
-
+    _calcFunc: Function = null;
+    setCalcFunc(cb: Function) {
+        this._calcFunc = cb;
     }
-    setForce(event: Slider) {
+
+    onUpdateProcess() {
         this._updateLabel()
     }
-    _updateLabel() {
+    private _updateLabel() {
         let slider = this.getComponent(Slider);
         if (slider) {
-            let val = slider.progress * this.maxValue;
-            FootBallGameData.Force = val;
-            this.label.string = val.toFixed(0).toString();
+            let val = lerp(this.minValue, this.maxValue, slider.progress);
+            this.label.string = val.toFixed(this.fixed).toString();
+            this._calcFunc(val);
         }
-
     }
 }
 

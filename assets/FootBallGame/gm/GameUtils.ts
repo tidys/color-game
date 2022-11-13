@@ -11,9 +11,7 @@ export class GameUtils extends Component {
     start() {
 
     }
-    onResetBallPositon() {
-        footBallGame.reset()
-    }
+
     update(deltaTime: number) {
 
     }

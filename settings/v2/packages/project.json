@@ -21,7 +21,7 @@
       "restitution": 0.3,
       "spinningFriction": 0.5,
       "rollingFriction": 1,
-      "friction": 0.5
+      "friction": 0.8
     },
     "gravity": {
       "y": -80

@@ -44,7 +44,6 @@ export class Ball extends Component {
                     this.arrowNode = arrow;
 
                     this.onTipsDirection();
-
                 }
             }
         });
@@ -68,7 +67,15 @@ export class Ball extends Component {
         let force = new Vec3(FootBallGameData.Direction.x, 0.4, FootBallGameData.Direction.z);
         force.normalize().multiplyScalar(FootBallGameData.Force);
         footBallGame.setGameState(GameState.BallMoving);
-        rigidBody.applyForce(force);
+        rigidBody.wakeUp();
+
+        // rigidBody.applyForce(new Vec3(-6000, 0, 0));// 添加一个可持续力
+        rigidBody.applyImpulse(force, new Vec3(0, 0, 0));// 添加一个瞬间冲击力，
+        if (rigidBody.isAwake) {
+            // console.log("添加扭矩成功")
+            let v = FootBallGameData.Offset;
+            // rigidBody.applyTorque(new Vec3(1, v, 1))
+        }
     }
     onTipsDirection() {
         const touchMove = (event: EventTouch) => {
@@ -99,18 +106,25 @@ export class Ball extends Component {
                 this.arrowNode = null;
             }
             // 显示踢小球的哪个部分界面
-            game.emit(Msg.ShowKicking);
+            // game.emit(Msg.ShowKicking);
+            this.shoot()
+
         }
 
         input.on(Input.EventType.TOUCH_MOVE, touchMove);
         input.on(Input.EventType.TOUCH_END, touchEnd);
     }
     update(deltaTime: number) {
-        let rigidBody = this.node.getComponent(RigidBody);
-        if (rigidBody.isSleeping) {
-            if (footBallGame.getGameState() === GameState.BallMoving) {
+        if (footBallGame.getGameState() === GameState.BallMoving) {
+            let rigidBody = this.node.getComponent(RigidBody);
+            if (rigidBody.isSleeping) {
                 footBallGame.failed()
+            } else {
+                // 运动的过程中施加一个瞬时力来实现香蕉球
+                rigidBody.applyImpulse(new Vec3(FootBallGameData.Offset, 0, 0));
             }
+        } else {
+
         }
     }
 }

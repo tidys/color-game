@@ -19,7 +19,7 @@ export class SceneComponent extends Component {
     start() {
         footBallGame.setFootBall(this.ball);
         footBallGame.reset()
-        game.emit(Msg.ShowKicking);
+        // game.emit(Msg.ShowKicking);
     }
     onLoad() {
 
