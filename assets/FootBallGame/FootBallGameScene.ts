@@ -1,7 +1,8 @@
-import { _decorator, Component, Node, input, Camera, Vec3, Input, EventKeyboard, KeyCode } from 'cc';
+import { _decorator, Component, Node, input, Camera, Vec3, Input, EventKeyboard, KeyCode, game } from 'cc';
 import { footBallGame } from './FootBallGame';
 import { Ball } from './logic/Ball';
 import { Role } from './logic/Role'
+import { Msg } from './Msg';
 
 const { ccclass, property } = _decorator;
 
@@ -18,6 +19,7 @@ export class SceneComponent extends Component {
     start() {
         footBallGame.setFootBall(this.ball);
         footBallGame.reset()
+        game.emit(Msg.ShowKicking);
     }
     onLoad() {
 

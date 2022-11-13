@@ -44,10 +44,7 @@ export class Ball extends Component {
                     this.arrowNode = arrow;
 
                     this.onTipsDirection();
-                    // let force = new Vec3(0, 0.4, -1);
-                    // force.normalize().multiplyScalar(FootBallGameData.Force);
-                    // footBallGame.setGameState(GameState.BallMoving);
-                    // rigidBody.applyForce(force);
+
                 }
             }
         });
@@ -66,7 +63,13 @@ export class Ball extends Component {
             });
         }
     }
-
+    shoot() {
+        const rigidBody = this.getComponent(RigidBody);
+        let force = new Vec3(FootBallGameData.Direction.x, 0.4, FootBallGameData.Direction.z);
+        force.normalize().multiplyScalar(FootBallGameData.Force);
+        footBallGame.setGameState(GameState.BallMoving);
+        rigidBody.applyForce(force);
+    }
     onTipsDirection() {
         const touchMove = (event: EventTouch) => {
             const arrowPosVec3 = this.arrowNode.getPosition();
@@ -86,11 +89,14 @@ export class Ball extends Component {
         const touchEnd = () => {
             input.off(Input.EventType.TOUCH_MOVE, touchMove);
             input.off(Input.EventType.TOUCH_END, touchEnd);
+            FootBallGameData.Direction = this.arrowNode.forward;
+            FootBallGameData.Force;
             if (this.arrowNode) {
                 this.arrowNode.removeFromParent()
                 this.arrowNode = null;
             }
-
+            // 显示踢小球的哪个部分界面
+            game.emit(Msg.ShowKicking);
         }
 
         input.on(Input.EventType.TOUCH_MOVE, touchMove);

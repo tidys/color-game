@@ -4,14 +4,12 @@ export enum Type {
     KickingFootBall,// 踢球
 
 }
-export const UIEvent = new EventTarget();
 export class UIMgr {
     init() {
 
     }
     show(type: Type) {
 
-        UIEvent.emit(Msg.ShowKicking, type);
 
     }
     hide() {

@@ -1,15 +1,18 @@
-import { _decorator, Component, Node, Input, EventTouch, EventTarget, Slider } from 'cc';
+import { _decorator, Component, Node, Input, EventTouch, EventTarget, Slider, game } from 'cc';
 import { Msg } from '../Msg';
-import { Type, UIEvent } from './UIMgr';
+import { Type } from './UIMgr';
 const { ccclass, property } = _decorator;
 
 @ccclass('UI')
 export class UI extends Component {
     @property(Node)
     ballNode: Node = null;
-    start() {
-        UIEvent.on(Msg.ShowKicking, (type: Type) => {
-            if (Type.KickingFootBall === type) { }
+    onLoad() {
+        game.on(Msg.ShowKicking, () => {
+            this.ballNode.active = true;
+        })
+        game.on(Msg.HideKiching, () => {
+            this.ballNode.active = false;
         })
 
         if (this.ballNode) {
