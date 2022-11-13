@@ -1,4 +1,4 @@
-import { Ball } from "../FootBall"
+import { Ball } from "./logic/Ball"
 
 export class FootBallGame {
     private ball: Ball = null;

@@ -1,5 +1,5 @@
 import { _decorator, Component, Node, BoxCollider, SphereCollider, physics, RigidBody, Vec3, math, input, Input, Camera, EventTouch, geometry, PhysicsSystem, UITransform, Prefab, instantiate, Mat3, Mat4, tween, EventKeyboard, KeyCode, Quat } from 'cc';
-import { Data } from './ui/GameData';
+import { FootBallGameData } from '../FootBallGameData';
 const { ccclass, property } = _decorator;
 
 @ccclass('Ball')
@@ -30,7 +30,7 @@ export class Ball extends Component {
                 let result = PhysicsSystem.instance.raycastClosestResult;
                 if (result.collider.node === this.node) {
                     let force = new Vec3(0, 0.4, -1);
-                    force.normalize().multiplyScalar(Data.Force);
+                    force.normalize().multiplyScalar(FootBallGameData.Force);
 
                     rigidBody.applyForce(force);
                 }

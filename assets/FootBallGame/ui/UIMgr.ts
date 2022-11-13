@@ -1,5 +1,5 @@
 import { EventTarget } from "cc"
-import { Msg } from "./Msg";
+import { Msg } from "../Msg";
 export enum Type {
     KickingFootBall,// 踢球
 

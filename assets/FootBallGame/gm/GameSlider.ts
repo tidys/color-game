@@ -1,5 +1,5 @@
 import { _decorator, Component, Node, Slider, Label, CCInteger } from 'cc';
-import { Data } from './GameData';
+import { FootBallGameData } from '../FootBallGameData';
 const { ccclass, property } = _decorator;
 
 @ccclass('GameSlider')
@@ -22,7 +22,7 @@ export class GameSlider extends Component {
         let slider = this.getComponent(Slider);
         if (slider) {
             let val = slider.progress * this.maxValue;
-            Data.Force = val;
+            FootBallGameData.Force = val;
             this.label.string = val.toFixed(0).toString();
         }
 

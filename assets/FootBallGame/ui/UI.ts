@@ -1,5 +1,5 @@
 import { _decorator, Component, Node, Input, EventTouch, EventTarget, Slider } from 'cc';
-import { Msg } from './Msg';
+import { Msg } from '../Msg';
 import { Type, UIEvent } from './UIMgr';
 const { ccclass, property } = _decorator;
 

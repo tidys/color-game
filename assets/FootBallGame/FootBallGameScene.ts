@@ -1,7 +1,7 @@
 import { _decorator, Component, Node, input, Camera, Vec3, Input, EventKeyboard, KeyCode } from 'cc';
-import { Ball } from './FootBall';
-import { Role } from './Role'
-import { footBallGame } from './ui/Game';
+import { footBallGame } from './FootBallGame';
+import { Ball } from './logic/Ball';
+import { Role } from './logic/Role'
 
 const { ccclass, property } = _decorator;
 
