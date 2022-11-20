@@ -1,4 +1,4 @@
-import { _decorator, Component, Node, BoxCollider, SphereCollider, physics, RigidBody, Vec3, math, input, Input, Camera, EventTouch, geometry, PhysicsSystem, UITransform, Prefab, instantiate, Mat3, Mat4, tween, EventKeyboard, KeyCode, Quat, game, Vec2 } from 'cc';
+import { _decorator, Component, Node, BoxCollider, SphereCollider, physics, RigidBody, Vec3, math, input, Input, Camera, EventTouch, geometry, PhysicsSystem, UITransform, Prefab, instantiate, Mat3, Mat4, tween, EventKeyboard, KeyCode, Quat, game, Vec2, PlaneCollider } from 'cc';
 import { footBallGame, GameState } from '../FootBallGame';
 import { FootBallGameData } from '../FootBallGameData';
 import { Msg } from '../Msg';
@@ -13,6 +13,9 @@ export class Ball extends Component {
     arrowPrefab: Prefab = null;
 
     arrowNode: Node = null;
+
+    @property(PlaneCollider)
+    spaceCollider: PlaneCollider = null;
 
     resetPosition() {
         this.node.setPosition(new Vec3(-44, 1, 0));
@@ -84,15 +87,20 @@ export class Ball extends Component {
 
             let ray = new geometry.Ray();
             this.camera.screenPointToRay(event.getLocationX(), event.getLocationY(), ray);
-            if (PhysicsSystem.instance.raycastClosest(ray)) {
-                let result = PhysicsSystem.instance.raycastClosestResult;
-                // TODO 得点住地面
-                const touchVec2 = new Vec2(result.hitPoint.x, result.hitPoint.z);
-                let vec = arrowPosVec2.subtract(touchVec2);
-                this.arrowNode.forward = new Vec3(vec.x, 0, vec.y);
-                const scale = this.arrowNode.getScale();
-                scale.z = vec.length() + 2;
-                this.arrowNode.setScale(scale);
+            if (PhysicsSystem.instance.raycast(ray)) {
+                let results = PhysicsSystem.instance.raycastResults;
+                for (let i = 0; i < results.length; i++) {
+                    let result = results[i];
+                    // 点击到了球场
+                    if (result.collider === this.spaceCollider) {
+                        const touchVec2 = new Vec2(result.hitPoint.x, result.hitPoint.z);
+                        let vec = arrowPosVec2.subtract(touchVec2);
+                        this.arrowNode.forward = new Vec3(vec.x, 0, vec.y);
+                        const scale = this.arrowNode.getScale();
+                        scale.z = vec.length() + 2;
+                        this.arrowNode.setScale(scale);
+                    }
+                }
             }
 
         };
