@@ -18,13 +18,14 @@
       }
     ],
     "defaultMaterial": {
-      "restitution": 0.3,
+      "restitution": 0.5,
       "spinningFriction": 0.5,
-      "rollingFriction": 1,
+      "rollingFriction": 0.2,
       "friction": 0.8
     },
     "gravity": {
-      "y": -80
-    }
+      "y": -10
+    },
+    "maxSubSteps": 3
   }
 }
