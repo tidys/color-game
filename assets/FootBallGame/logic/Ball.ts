@@ -15,7 +15,7 @@ export class Ball extends Component {
     arrowNode: Node = null;
 
     resetPosition() {
-        this.node.setPosition(new Vec3(0, 12, 0));
+        this.node.setPosition(new Vec3(-44, 1, 0));
         let rigidBody = this.node.getComponent(RigidBody);
         if (rigidBody) {
             rigidBody.clearVelocity()
@@ -39,7 +39,7 @@ export class Ball extends Component {
                     let arrow = instantiate(this.arrowPrefab);
                     arrow.forward = new Vec3(0, 0, -1);
                     arrow.setScale(1, 1, 1);
-                    arrow.worldPosition = new Vec3(this.node.worldPosition.x, 0.1, this.node.worldPosition.z);
+                    arrow.worldPosition = new Vec3(this.node.worldPosition.x, 0.001, this.node.worldPosition.z);
                     this.node.parent.addChild(arrow);
                     this.arrowNode = arrow;
 
@@ -91,7 +91,7 @@ export class Ball extends Component {
                 let vec = arrowPosVec2.subtract(touchVec2);
                 this.arrowNode.forward = new Vec3(vec.x, 0, vec.y);
                 const scale = this.arrowNode.getScale();
-                scale.z = vec.length();
+                scale.z = vec.length() + 2;
                 this.arrowNode.setScale(scale);
             }
 

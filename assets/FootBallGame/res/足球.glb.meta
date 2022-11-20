@@ -1,0 +1,93 @@
+{
+  "ver": "2.2.0",
+  "importer": "gltf",
+  "imported": true,
+  "uuid": "6c1aa7c0-f550-43f1-9984-9850cd6e5dcd",
+  "files": [],
+  "subMetas": {
+    "f2dea": {
+      "importer": "gltf-mesh",
+      "uuid": "6c1aa7c0-f550-43f1-9984-9850cd6e5dcd@f2dea",
+      "displayName": "",
+      "id": "f2dea",
+      "name": "棱角球.003.mesh",
+      "userData": {
+        "gltfIndex": 0
+      },
+      "ver": "1.1.0",
+      "imported": true,
+      "files": [
+        ".bin",
+        ".json"
+      ],
+      "subMetas": {}
+    },
+    "515b9": {
+      "importer": "gltf-material",
+      "uuid": "6c1aa7c0-f550-43f1-9984-9850cd6e5dcd@515b9",
+      "displayName": "",
+      "id": "515b9",
+      "name": "black.material",
+      "userData": {
+        "gltfIndex": 0
+      },
+      "ver": "1.0.14",
+      "imported": true,
+      "files": [
+        ".json"
+      ],
+      "subMetas": {}
+    },
+    "b31f4": {
+      "importer": "gltf-material",
+      "uuid": "6c1aa7c0-f550-43f1-9984-9850cd6e5dcd@b31f4",
+      "displayName": "",
+      "id": "b31f4",
+      "name": "white.material",
+      "userData": {
+        "gltfIndex": 1
+      },
+      "ver": "1.0.14",
+      "imported": true,
+      "files": [
+        ".json"
+      ],
+      "subMetas": {}
+    },
+    "d0a84": {
+      "importer": "gltf-scene",
+      "uuid": "6c1aa7c0-f550-43f1-9984-9850cd6e5dcd@d0a84",
+      "displayName": "",
+      "id": "d0a84",
+      "name": "足球.prefab",
+      "userData": {
+        "gltfIndex": 0
+      },
+      "ver": "1.0.12",
+      "imported": true,
+      "files": [
+        ".json"
+      ],
+      "subMetas": {}
+    }
+  },
+  "userData": {
+    "imageMetas": [],
+    "legacyFbxImporter": false,
+    "redirect": "6c1aa7c0-f550-43f1-9984-9850cd6e5dcd@d0a84",
+    "assetFinder": {
+      "meshes": [
+        "6c1aa7c0-f550-43f1-9984-9850cd6e5dcd@f2dea"
+      ],
+      "skeletons": [],
+      "textures": [],
+      "materials": [
+        "6c1aa7c0-f550-43f1-9984-9850cd6e5dcd@515b9",
+        "6c1aa7c0-f550-43f1-9984-9850cd6e5dcd@b31f4"
+      ],
+      "scenes": [
+        "6c1aa7c0-f550-43f1-9984-9850cd6e5dcd@d0a84"
+      ]
+    }
+  }
+}

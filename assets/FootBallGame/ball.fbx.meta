@@ -1,0 +1,126 @@
+{
+  "ver": "2.2.0",
+  "importer": "fbx",
+  "imported": true,
+  "uuid": "c9550f02-0cb2-4510-9fea-41b3683cc13f",
+  "files": [],
+  "subMetas": {
+    "0a13e": {
+      "importer": "gltf-mesh",
+      "uuid": "c9550f02-0cb2-4510-9fea-41b3683cc13f@0a13e",
+      "displayName": "",
+      "id": "0a13e",
+      "name": "球体.mesh",
+      "userData": {
+        "gltfIndex": 0
+      },
+      "ver": "1.1.0",
+      "imported": true,
+      "files": [
+        ".bin",
+        ".json"
+      ],
+      "subMetas": {}
+    },
+    "48b02": {
+      "importer": "gltf-embeded-image",
+      "uuid": "c9550f02-0cb2-4510-9fea-41b3683cc13f@48b02",
+      "displayName": "",
+      "id": "48b02",
+      "name": "base_color_texture.image",
+      "userData": {
+        "gltfIndex": 0
+      },
+      "ver": "1.0.3",
+      "imported": true,
+      "files": [
+        ".json",
+        ".png"
+      ],
+      "subMetas": {}
+    },
+    "7d6ab": {
+      "importer": "texture",
+      "uuid": "c9550f02-0cb2-4510-9fea-41b3683cc13f@7d6ab",
+      "displayName": "",
+      "id": "7d6ab",
+      "name": "base_color_texture.texture",
+      "userData": {
+        "wrapModeS": "repeat",
+        "wrapModeT": "repeat",
+        "minfilter": "linear",
+        "magfilter": "linear",
+        "mipfilter": "none",
+        "anisotropy": 0,
+        "isUuid": true,
+        "imageUuidOrDatabaseUri": "c9550f02-0cb2-4510-9fea-41b3683cc13f@48b02"
+      },
+      "ver": "1.0.21",
+      "imported": true,
+      "files": [
+        ".json"
+      ],
+      "subMetas": {}
+    },
+    "22e2a": {
+      "importer": "gltf-material",
+      "uuid": "c9550f02-0cb2-4510-9fea-41b3683cc13f@22e2a",
+      "displayName": "",
+      "id": "22e2a",
+      "name": "材质.material",
+      "userData": {
+        "gltfIndex": 0
+      },
+      "ver": "1.0.14",
+      "imported": true,
+      "files": [
+        ".json"
+      ],
+      "subMetas": {}
+    },
+    "8c1b3": {
+      "importer": "gltf-scene",
+      "uuid": "c9550f02-0cb2-4510-9fea-41b3683cc13f@8c1b3",
+      "displayName": "",
+      "id": "8c1b3",
+      "name": "ball.prefab",
+      "userData": {
+        "gltfIndex": 0
+      },
+      "ver": "1.0.12",
+      "imported": true,
+      "files": [
+        ".json"
+      ],
+      "subMetas": {}
+    }
+  },
+  "userData": {
+    "imageMetas": [
+      {
+        "name": "base_color_texture",
+        "uri": "c9550f02-0cb2-4510-9fea-41b3683cc13f@48b02"
+      }
+    ],
+    "legacyFbxImporter": false,
+    "fbx": {
+      "smartMaterialEnabled": true
+    },
+    "redirect": "c9550f02-0cb2-4510-9fea-41b3683cc13f@8c1b3",
+    "assetFinder": {
+      "meshes": [
+        "c9550f02-0cb2-4510-9fea-41b3683cc13f@0a13e"
+      ],
+      "skeletons": [],
+      "textures": [
+        "c9550f02-0cb2-4510-9fea-41b3683cc13f@7d6ab"
+      ],
+      "materials": [
+        "c9550f02-0cb2-4510-9fea-41b3683cc13f@22e2a"
+      ],
+      "scenes": [
+        "c9550f02-0cb2-4510-9fea-41b3683cc13f@8c1b3"
+      ]
+    }
+  }
+}
