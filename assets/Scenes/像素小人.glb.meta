@@ -1,0 +1,182 @@
+{
+  "ver": "2.2.0",
+  "importer": "gltf",
+  "imported": true,
+  "uuid": "1700cadc-1765-4ad6-b175-655a88d5f5a4",
+  "files": [
+    "__original-animation-0.cconb"
+  ],
+  "subMetas": {
+    "2f6d1": {
+      "importer": "gltf-mesh",
+      "uuid": "1700cadc-1765-4ad6-b175-655a88d5f5a4@2f6d1",
+      "displayName": "",
+      "id": "2f6d1",
+      "name": "Cube.mesh",
+      "userData": {
+        "gltfIndex": 0
+      },
+      "ver": "1.1.0",
+      "imported": true,
+      "files": [
+        ".bin",
+        ".json"
+      ],
+      "subMetas": {}
+    },
+    "40c16": {
+      "importer": "gltf-animation",
+      "uuid": "1700cadc-1765-4ad6-b175-655a88d5f5a4@40c16",
+      "displayName": "",
+      "id": "40c16",
+      "name": "act.animation",
+      "userData": {
+        "gltfIndex": 0,
+        "wrapMode": 2,
+        "sample": 30,
+        "span": {
+          "from": 0,
+          "to": 0.75
+        },
+        "events": []
+      },
+      "ver": "1.0.16",
+      "imported": true,
+      "files": [
+        ".cconb"
+      ],
+      "subMetas": {}
+    },
+    "a1758": {
+      "importer": "gltf-skeleton",
+      "uuid": "1700cadc-1765-4ad6-b175-655a88d5f5a4@a1758",
+      "displayName": "",
+      "id": "a1758",
+      "name": "骨架.skeleton",
+      "userData": {
+        "gltfIndex": 0,
+        "jointsLength": 10
+      },
+      "ver": "1.0.1",
+      "imported": true,
+      "files": [
+        ".json"
+      ],
+      "subMetas": {}
+    },
+    "e8a07": {
+      "importer": "gltf-embeded-image",
+      "uuid": "1700cadc-1765-4ad6-b175-655a88d5f5a4@e8a07",
+      "displayName": "",
+      "id": "e8a07",
+      "name": "skin.image",
+      "userData": {
+        "gltfIndex": 0
+      },
+      "ver": "1.0.3",
+      "imported": true,
+      "files": [
+        ".json",
+        ".png"
+      ],
+      "subMetas": {}
+    },
+    "e39f7": {
+      "importer": "texture",
+      "uuid": "1700cadc-1765-4ad6-b175-655a88d5f5a4@e39f7",
+      "displayName": "",
+      "id": "e39f7",
+      "name": "UnnamedTexture.texture",
+      "userData": {
+        "wrapModeS": "repeat",
+        "wrapModeT": "repeat",
+        "minfilter": "linear",
+        "magfilter": "linear",
+        "mipfilter": "linear",
+        "anisotropy": 0,
+        "isUuid": true,
+        "imageUuidOrDatabaseUri": "1700cadc-1765-4ad6-b175-655a88d5f5a4@e8a07"
+      },
+      "ver": "1.0.21",
+      "imported": true,
+      "files": [
+        ".json"
+      ],
+      "subMetas": {}
+    },
+    "b4e6b": {
+      "importer": "gltf-material",
+      "uuid": "1700cadc-1765-4ad6-b175-655a88d5f5a4@b4e6b",
+      "displayName": "",
+      "id": "b4e6b",
+      "name": "Material.material",
+      "userData": {
+        "gltfIndex": 0
+      },
+      "ver": "1.0.14",
+      "imported": true,
+      "files": [
+        ".json"
+      ],
+      "subMetas": {}
+    },
+    "190e3": {
+      "importer": "gltf-scene",
+      "uuid": "1700cadc-1765-4ad6-b175-655a88d5f5a4@190e3",
+      "displayName": "",
+      "id": "190e3",
+      "name": "像素小人.prefab",
+      "userData": {
+        "gltfIndex": 0
+      },
+      "ver": "1.0.12",
+      "imported": true,
+      "files": [
+        ".json"
+      ],
+      "subMetas": {}
+    }
+  },
+  "userData": {
+    "imageMetas": [
+      {
+        "name": "skin",
+        "uri": "1700cadc-1765-4ad6-b175-655a88d5f5a4@e8a07"
+      }
+    ],
+    "legacyFbxImporter": false,
+    "redirect": "1700cadc-1765-4ad6-b175-655a88d5f5a4@190e3",
+    "assetFinder": {
+      "meshes": [
+        "1700cadc-1765-4ad6-b175-655a88d5f5a4@2f6d1"
+      ],
+      "skeletons": [
+        "1700cadc-1765-4ad6-b175-655a88d5f5a4@a1758"
+      ],
+      "textures": [
+        "1700cadc-1765-4ad6-b175-655a88d5f5a4@e39f7"
+      ],
+      "materials": [
+        "1700cadc-1765-4ad6-b175-655a88d5f5a4@b4e6b"
+      ],
+      "scenes": [
+        "1700cadc-1765-4ad6-b175-655a88d5f5a4@190e3"
+      ]
+    },
+    "animationImportSettings": [
+      {
+        "name": "act",
+        "duration": 0.75,
+        "fps": 30,
+        "splits": [
+          {
+            "name": "act",
+            "from": 0,
+            "to": 0.75,
+            "wrapMode": 2
+          }
+        ]
+      }
+    ]
+  }
+}

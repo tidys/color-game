@@ -3,7 +3,9 @@
   "importer": "gltf",
   "imported": true,
   "uuid": "aa1714dc-4088-47cb-990b-5a599eaf6bc5",
-  "files": [],
+  "files": [
+    "__original-animation-0.cconb"
+  ],
   "subMetas": {
     "fa0d6": {
       "importer": "gltf-mesh",
@@ -19,6 +21,29 @@
       "files": [
         ".bin",
         ".json"
+      ],
+      "subMetas": {}
+    },
+    "f0fb3": {
+      "importer": "gltf-animation",
+      "uuid": "aa1714dc-4088-47cb-990b-5a599eaf6bc5@f0fb3",
+      "displayName": "",
+      "id": "f0fb3",
+      "name": "球门.animation",
+      "userData": {
+        "gltfIndex": 0,
+        "wrapMode": 2,
+        "sample": 30,
+        "span": {
+          "from": 0,
+          "to": 0.8333333134651184
+        },
+        "events": []
+      },
+      "ver": "1.0.16",
+      "imported": true,
+      "files": [
+        ".cconb"
       ],
       "subMetas": {}
     },
@@ -179,6 +204,21 @@
           {}
         ]
       }
-    }
+    },
+    "animationImportSettings": [
+      {
+        "name": "球门",
+        "duration": 0.8333333134651184,
+        "fps": 30,
+        "splits": [
+          {
+            "name": "球门",
+            "from": 0,
+            "to": 0.8333333134651184,
+            "wrapMode": 2
+          }
+        ]
+      }
+    ]
   }
 }

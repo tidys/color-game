@@ -2,6 +2,7 @@ import { _decorator, Component, Node, BoxCollider, SphereCollider, physics, Rigi
 import { footBallGame, GameState } from '../FootBallGame';
 import { FootBallGameData } from '../FootBallGameData';
 import { Msg } from '../Msg';
+import { Role } from './Role';
 const { ccclass, property } = _decorator;
 
 @ccclass('Ball')
@@ -17,12 +18,17 @@ export class Ball extends Component {
     @property(PlaneCollider)
     spaceCollider: PlaneCollider = null;
 
+    @property(Role)
+    role: Role = null;
+    @property(Node)
+    door: Node = null;
     resetPosition() {
         this.node.setPosition(new Vec3(-44, 1, 0));
         let rigidBody = this.node.getComponent(RigidBody);
         if (rigidBody) {
             rigidBody.clearVelocity()
             rigidBody.clearForces();
+            this.role.resetWithPos(this.node.getPosition(), this.door.getPosition())
         }
     }
     onLoad() {
@@ -99,6 +105,8 @@ export class Ball extends Component {
                         const scale = this.arrowNode.getScale();
                         scale.z = vec.length() + 2;
                         this.arrowNode.setScale(scale);
+
+                        this.role.arroundBall(this.node.getPosition(), result.hitPoint)
                     }
                 }
             }
