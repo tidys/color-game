@@ -53,38 +53,39 @@ export class SceneComponent extends Component {
                     this.node.parent.addChild(arrow);
                     this.arrowNode = arrow;
 
+                    this.updateArrowForward(event);
                     this.onTipsDirection();
                 }
             }
         });
+    }
+    private updateArrowForward(event: EventTouch) {
+        const arrowPosVec3 = this.arrowNode.getPosition();
+        const arrowPosVec2 = new Vec2(arrowPosVec3.x, arrowPosVec3.z)
 
+        let ray = new geometry.Ray();
+        this.camera.screenPointToRay(event.getLocationX(), event.getLocationY(), ray);
+        if (PhysicsSystem.instance.raycast(ray)) {
+            let results = PhysicsSystem.instance.raycastResults;
+            for (let i = 0; i < results.length; i++) {
+                let result = results[i];
+                // 点击到了球场
+                if (result.collider === this.spaceCollider) {
+                    const touchVec2 = new Vec2(result.hitPoint.x, result.hitPoint.z);
+                    let vec = arrowPosVec2.subtract(touchVec2);
+                    this.arrowNode.forward = new Vec3(vec.x, 0, vec.y);
+                    const scale = this.arrowNode.getScale();
+                    scale.z = vec.length() + 2;
+                    this.arrowNode.setScale(scale);
 
+                    this.role.arroundBall(this.ball.node.getPosition(), result.hitPoint)
+                }
+            }
+        }
     }
     onTipsDirection() {
         const touchMove = (event: EventTouch) => {
-            const arrowPosVec3 = this.arrowNode.getPosition();
-            const arrowPosVec2 = new Vec2(arrowPosVec3.x, arrowPosVec3.z)
-
-            let ray = new geometry.Ray();
-            this.camera.screenPointToRay(event.getLocationX(), event.getLocationY(), ray);
-            if (PhysicsSystem.instance.raycast(ray)) {
-                let results = PhysicsSystem.instance.raycastResults;
-                for (let i = 0; i < results.length; i++) {
-                    let result = results[i];
-                    // 点击到了球场
-                    if (result.collider === this.spaceCollider) {
-                        const touchVec2 = new Vec2(result.hitPoint.x, result.hitPoint.z);
-                        let vec = arrowPosVec2.subtract(touchVec2);
-                        this.arrowNode.forward = new Vec3(vec.x, 0, vec.y);
-                        const scale = this.arrowNode.getScale();
-                        scale.z = vec.length() + 2;
-                        this.arrowNode.setScale(scale);
-
-                        this.role.arroundBall(this.ball.node.getPosition(), result.hitPoint)
-                    }
-                }
-            }
-
+            this.updateArrowForward(event);
         };
         const touchEnd = () => {
             input.off(Input.EventType.TOUCH_MOVE, touchMove);
@@ -96,8 +97,8 @@ export class SceneComponent extends Component {
                 this.arrowNode = null;
             }
             // 显示踢小球的哪个部分界面
-            // game.emit(Msg.ShowKicking);
-            this.ball.shoot()
+            game.emit(Msg.ShowKicking);
+            // this.ball.shoot()
 
         }
 

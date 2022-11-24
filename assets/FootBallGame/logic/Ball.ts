@@ -43,12 +43,8 @@ export class Ball extends Component {
         rigidBody.wakeUp();
 
         // rigidBody.applyForce(new Vec3(-6000, 0, 0));// 添加一个可持续力
+        // rigidBody.applyTorque(new Vec3(1, v, 1))
         rigidBody.applyImpulse(force, new Vec3(0, 0, 0));// 添加一个瞬间冲击力，
-        if (rigidBody.isAwake) {
-            // console.log("添加扭矩成功")
-            let v = FootBallGameData.Offset;
-            // rigidBody.applyTorque(new Vec3(1, v, 1))
-        }
     }
 
     update(deltaTime: number) {
@@ -58,7 +54,7 @@ export class Ball extends Component {
                 footBallGame.failed()
             } else {
                 // 运动的过程中施加一个瞬时力来实现香蕉球
-                rigidBody.applyImpulse(new Vec3(FootBallGameData.Offset, 0, 0));
+                // rigidBody.applyImpulse(new Vec3(FootBallGameData.Offset, 0, 0));
             }
         } else {
 

@@ -1,11 +1,11 @@
-import { _decorator, Component, Node, BoxCollider, CCBoolean, game } from 'cc';
+import { _decorator, Component, Node, BoxCollider, CCBoolean, game, tween } from 'cc';
 import { footBallGame } from '../FootBallGame';
 import { Msg } from '../Msg';
 const { ccclass, property } = _decorator;
 
 @ccclass('BallDoor')
 export class BallDoor extends Component {
-    @property(BoxCollider)
+    @property({ type: BoxCollider, displayName: "进球的碰撞体" })
     collider: BoxCollider = null;
     @property(CCBoolean)
     isTrigger = false;
@@ -16,6 +16,11 @@ export class BallDoor extends Component {
             this.collider.off("onTriggerEnter", this.onShootingIn, this)
             this.collider.on("onCollisionEnter", this.onShootingIn, this)
             this.collider.on("onTriggerEnter", this.onShootingIn, this)
+        })
+        game.on(Msg.ShootingIn, () => {
+            tween().target(this).delay(1).call(() => {
+                game.emit(Msg.ResetGame);
+            }).start()
         })
     }
 

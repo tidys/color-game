@@ -1,4 +1,4 @@
-import { game } from "cc";
+import { game, Scheduler, tween } from "cc";
 import { Ball } from "./logic/Ball"
 import { Msg } from "./Msg";
 
@@ -29,10 +29,12 @@ export class FootBallGame {
     shootingIn() {
         this._state = GameState.Result;
         console.log("进球了")
+        game.emit(Msg.ShootingIn);
     }
     failed() {
         this._state = GameState.Result;
         console.log("失败了")
+        game.emit(Msg.ResetGame);
     }
 }
 export const footBallGame = new FootBallGame()

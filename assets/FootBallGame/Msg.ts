@@ -1,5 +1,6 @@
 export const Msg = {
     ShowKicking: "ShowKicking",
     HideKiching: "HideKiching",
-    ResetGame: "ResetGame"
+    ResetGame: "ResetGame",
+    ShootingIn: "ShootingIn",
 }
