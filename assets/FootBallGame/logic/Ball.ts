@@ -7,28 +7,13 @@ const { ccclass, property } = _decorator;
 
 @ccclass('Ball')
 export class Ball extends Component {
-    @property(Camera)
-    camera: Camera;
 
-    @property(Prefab)
-    arrowPrefab: Prefab = null;
-
-    arrowNode: Node = null;
-
-    @property(PlaneCollider)
-    spaceCollider: PlaneCollider = null;
-
-    @property(Role)
-    role: Role = null;
-    @property(Node)
-    door: Node = null;
     resetPosition() {
         this.node.setPosition(new Vec3(-44, 1, 0));
         let rigidBody = this.node.getComponent(RigidBody);
         if (rigidBody) {
             rigidBody.clearVelocity()
             rigidBody.clearForces();
-            this.role.resetWithPos(this.node.getPosition(), this.door.getPosition())
         }
     }
     onLoad() {
@@ -36,28 +21,7 @@ export class Ball extends Component {
             this.resetPosition();
         })
 
-
         let rigidBody = this.getComponent(RigidBody);
-        input.on(Input.EventType.TOUCH_START, (event: EventTouch) => {
-            let ray = new geometry.Ray();
-            this.camera.screenPointToRay(event.getLocationX(), event.getLocationY(), ray);
-
-            if (PhysicsSystem.instance.raycastClosest(ray)) {
-                let result = PhysicsSystem.instance.raycastClosestResult;
-                if (result.collider.node === this.node) {
-                    let arrow = instantiate(this.arrowPrefab);
-                    arrow.forward = new Vec3(0, 0, -1);
-                    arrow.setScale(1, 1, 1);
-                    arrow.worldPosition = new Vec3(this.node.worldPosition.x, 0.001, this.node.worldPosition.z);
-                    this.node.parent.addChild(arrow);
-                    this.arrowNode = arrow;
-
-                    this.onTipsDirection();
-                }
-            }
-        });
-
-
         let boxCollider = this.getComponent(SphereCollider);
         if (boxCollider) {
 
@@ -86,50 +50,7 @@ export class Ball extends Component {
             // rigidBody.applyTorque(new Vec3(1, v, 1))
         }
     }
-    onTipsDirection() {
-        const touchMove = (event: EventTouch) => {
-            const arrowPosVec3 = this.arrowNode.getPosition();
-            const arrowPosVec2 = new Vec2(arrowPosVec3.x, arrowPosVec3.z)
 
-            let ray = new geometry.Ray();
-            this.camera.screenPointToRay(event.getLocationX(), event.getLocationY(), ray);
-            if (PhysicsSystem.instance.raycast(ray)) {
-                let results = PhysicsSystem.instance.raycastResults;
-                for (let i = 0; i < results.length; i++) {
-                    let result = results[i];
-                    // 点击到了球场
-                    if (result.collider === this.spaceCollider) {
-                        const touchVec2 = new Vec2(result.hitPoint.x, result.hitPoint.z);
-                        let vec = arrowPosVec2.subtract(touchVec2);
-                        this.arrowNode.forward = new Vec3(vec.x, 0, vec.y);
-                        const scale = this.arrowNode.getScale();
-                        scale.z = vec.length() + 2;
-                        this.arrowNode.setScale(scale);
-
-                        this.role.arroundBall(this.node.getPosition(), result.hitPoint)
-                    }
-                }
-            }
-
-        };
-        const touchEnd = () => {
-            input.off(Input.EventType.TOUCH_MOVE, touchMove);
-            input.off(Input.EventType.TOUCH_END, touchEnd);
-            FootBallGameData.Direction = this.arrowNode.forward;
-            FootBallGameData.Force;
-            if (this.arrowNode) {
-                this.arrowNode.removeFromParent()
-                this.arrowNode = null;
-            }
-            // 显示踢小球的哪个部分界面
-            // game.emit(Msg.ShowKicking);
-            this.shoot()
-
-        }
-
-        input.on(Input.EventType.TOUCH_MOVE, touchMove);
-        input.on(Input.EventType.TOUCH_END, touchEnd);
-    }
     update(deltaTime: number) {
         if (footBallGame.getGameState() === GameState.BallMoving) {
             let rigidBody = this.node.getComponent(RigidBody);

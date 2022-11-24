@@ -1,4 +1,5 @@
 import { _decorator, Component, Node, Input, input, EventKeyboard, KeyCode, RigidBody, Vec3, SkeletalAnimation } from 'cc';
+import { RoleAnimation } from './RoleAnimation';
 
 const { ccclass, property } = _decorator;
 
@@ -14,8 +15,7 @@ enum Vertical {
     Back,
 }
 
-const stand = "stand";
-const walk = "walk";
+
 export const offsetBallDistance = 2;
 @ccclass('Role')
 export class Role extends Component {
@@ -23,10 +23,10 @@ export class Role extends Component {
     horizontal: Horizontal = Horizontal.None;
     vertical: Vertical = Vertical.None;
     speed = 0.1;
+
+    _roleAnimation: RoleAnimation = null;
     onLoad() {
-        const skeAnimation = this.node.getComponent(SkeletalAnimation);
-        skeAnimation.createState(skeAnimation.clips[0], stand);
-        skeAnimation.createState(skeAnimation.clips[1], walk);
+        this._roleAnimation = this.node.addComponent(RoleAnimation);
     }
     resetWithPos(ballPos: Vec3, doorPos: Vec3) {
         ballPos.y = 0;
@@ -35,10 +35,11 @@ export class Role extends Component {
         let rolePos = ballPos.add(vec.normalize().multiplyScalar(offsetBallDistance));
         this.node.setPosition(new Vec3(rolePos.x, 0, rolePos.z))
         this.node.forward = vec;
-        const skeAnimation = this.node.getComponent(SkeletalAnimation);
-        skeAnimation.play(stand);
+        this._roleAnimation.stand()
     }
     arroundBall(ballPos: Vec3, clickPos: Vec3) {
+        ballPos.y = 0;
+        clickPos.y = 0;
         let vec = clickPos.subtract(ballPos)
         let rolePos = ballPos.add(vec.normalize().multiplyScalar(offsetBallDistance));
         this.node.setPosition(new Vec3(rolePos.x, 0, rolePos.z))
