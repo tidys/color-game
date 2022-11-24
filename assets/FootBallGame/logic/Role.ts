@@ -24,9 +24,14 @@ export class Role extends Component {
     vertical: Vertical = Vertical.None;
     speed = 0.1;
 
+    @property(SkeletalAnimation)
+    skeleta: SkeletalAnimation = null;
+
     _roleAnimation: RoleAnimation = null;
+
     onLoad() {
         this._roleAnimation = this.node.addComponent(RoleAnimation);
+        this._roleAnimation.initSkeleta(this.skeleta);
     }
     resetWithPos(ballPos: Vec3, doorPos: Vec3) {
         ballPos.y = 0;

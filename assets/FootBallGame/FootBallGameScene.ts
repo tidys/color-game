@@ -1,4 +1,4 @@
-import { _decorator, Component, Node, input, Camera, Vec3, Input, EventKeyboard, KeyCode, game, PlaneCollider, Prefab, PhysicsSystem, geometry, instantiate, EventTouch, Vec2, tween } from 'cc';
+import { _decorator, Component, Node, input, Camera, Vec3, Input, EventKeyboard, KeyCode, game, PlaneCollider, Prefab, PhysicsSystem, geometry, instantiate, EventTouch, Vec2, tween, view, setDisplayStats } from 'cc';
 import { footBallGame } from './FootBallGame';
 import { GameCamera } from './FootBallGameCamera';
 import { FootBallGameData } from './FootBallGameData';
@@ -10,7 +10,10 @@ const { ccclass, property } = _decorator;
 
 @ccclass('SceneComponent')
 export class SceneComponent extends Component {
-    @property({ type: Role, displayName: "球员" })
+
+    @property({ type: Prefab, displayName: "球员" })
+    rolePrefab: Prefab = null
+
     role: Role = null;
 
     @property({ type: Node, displayName: "球门" })
@@ -37,6 +40,11 @@ export class SceneComponent extends Component {
         // game.emit(Msg.ShowKicking);
     }
     onLoad() {
+        const roleNode = instantiate(this.rolePrefab);
+        this.role = roleNode.getComponent(Role);
+        this.node.parent.addChild(roleNode);
+
+        setDisplayStats(false)
         game.on(Msg.ResetGame, () => {
             this.role.resetWithPos(this.ball.node.getPosition(), this.door.getPosition())
             input.off(Input.EventType.TOUCH_START, this.touchToEnsureDirection, this);

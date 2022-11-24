@@ -6,8 +6,10 @@ const walk = "walk";
 @ccclass('RoleAnimation')
 export class RoleAnimation extends Component {
     private _ani: string = null;
-    onLoad() {
-        const skeAnimation = this.node.getComponent(SkeletalAnimation);
+    private _skeletal: SkeletalAnimation = null;
+
+    initSkeleta(skeAnimation: SkeletalAnimation) {
+        this._skeletal = skeAnimation;
         skeAnimation.createState(skeAnimation.clips[0], stand);
         skeAnimation.createState(skeAnimation.clips[1], walk);
     }
@@ -24,8 +26,7 @@ export class RoleAnimation extends Component {
             return;
         }
         this._ani = aniName;
-        const skeAnimation = this.node.getComponent(SkeletalAnimation);
-        skeAnimation.play(aniName);
+        this._skeletal.play(aniName);
     }
 
     update(deltaTime: number) {
