@@ -3,4 +3,5 @@ export const Msg = {
     HideKiching: "HideKiching",
     ResetGame: "ResetGame",
     ShootingIn: "ShootingIn",
+    GotoShoot: "GotoShoot",
 }

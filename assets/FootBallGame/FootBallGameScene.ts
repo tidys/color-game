@@ -1,5 +1,6 @@
-import { _decorator, Component, Node, input, Camera, Vec3, Input, EventKeyboard, KeyCode, game, PlaneCollider, Prefab, PhysicsSystem, geometry, instantiate, EventTouch, Vec2 } from 'cc';
+import { _decorator, Component, Node, input, Camera, Vec3, Input, EventKeyboard, KeyCode, game, PlaneCollider, Prefab, PhysicsSystem, geometry, instantiate, EventTouch, Vec2, tween } from 'cc';
 import { footBallGame } from './FootBallGame';
+import { GameCamera } from './FootBallGameCamera';
 import { FootBallGameData } from './FootBallGameData';
 import { Ball } from './logic/Ball';
 import { Role } from './logic/Role'
@@ -21,8 +22,8 @@ export class SceneComponent extends Component {
     @property({ type: PlaneCollider, displayName: "球场" })
     spaceCollider: PlaneCollider = null;
 
-    @property(Camera)
-    camera: Camera = null;
+    @property(GameCamera)
+    gameCamera: GameCamera = null;
 
     @property(Prefab)
     arrowPrefab: Prefab = null;
@@ -38,33 +39,42 @@ export class SceneComponent extends Component {
     onLoad() {
         game.on(Msg.ResetGame, () => {
             this.role.resetWithPos(this.ball.node.getPosition(), this.door.getPosition())
+            input.off(Input.EventType.TOUCH_START, this.touchToEnsureDirection, this);
+            input.on(Input.EventType.TOUCH_START, this.touchToEnsureDirection, this);
         })
-        input.on(Input.EventType.TOUCH_START, (event: EventTouch) => {
-            let ray = new geometry.Ray();
-            this.camera.screenPointToRay(event.getLocationX(), event.getLocationY(), ray);
+        game.on(Msg.GotoShoot, () => {
+            this.role.gotoShoot(this.ball.node.getPosition(), () => {
+                this.gameCamera.shake();
+                this.ball.shoot()
+            })
+        })
+    }
+    private touchToEnsureDirection(event: EventTouch) {
+        let ray = new geometry.Ray();
+        this.gameCamera.getCamera().screenPointToRay(event.getLocationX(), event.getLocationY(), ray);
 
-            if (PhysicsSystem.instance.raycastClosest(ray)) {
-                let result = PhysicsSystem.instance.raycastClosestResult;
-                if (result.collider === this.spaceCollider) {
-                    let arrow = instantiate(this.arrowPrefab);
-                    arrow.forward = new Vec3(0, 0, -1);
-                    arrow.setScale(1, 1, 1);
-                    arrow.worldPosition = new Vec3(this.ball.node.worldPosition.x, 0.001, this.ball.node.worldPosition.z);
-                    this.node.parent.addChild(arrow);
-                    this.arrowNode = arrow;
+        if (PhysicsSystem.instance.raycastClosest(ray)) {
+            let result = PhysicsSystem.instance.raycastClosestResult;
+            if (result.collider === this.spaceCollider) {
+                let arrow = instantiate(this.arrowPrefab);
+                arrow.forward = new Vec3(0, 0, -1);
+                arrow.setScale(1, 1, 1);
+                arrow.worldPosition = new Vec3(this.ball.node.worldPosition.x, 0.001, this.ball.node.worldPosition.z);
+                this.node.parent.addChild(arrow);
+                this.arrowNode = arrow;
 
-                    this.updateArrowForward(event);
-                    this.onTipsDirection();
-                }
+                this.updateArrowForward(event);
+                input.off(Input.EventType.TOUCH_START, this.touchToEnsureDirection, this);
+                this.onTipsDirection();
             }
-        });
+        }
     }
     private updateArrowForward(event: EventTouch) {
         const arrowPosVec3 = this.arrowNode.getPosition();
         const arrowPosVec2 = new Vec2(arrowPosVec3.x, arrowPosVec3.z)
 
         let ray = new geometry.Ray();
-        this.camera.screenPointToRay(event.getLocationX(), event.getLocationY(), ray);
+        this.gameCamera.getCamera().screenPointToRay(event.getLocationX(), event.getLocationY(), ray);
         if (PhysicsSystem.instance.raycast(ray)) {
             let results = PhysicsSystem.instance.raycastResults;
             for (let i = 0; i < results.length; i++) {
@@ -97,8 +107,8 @@ export class SceneComponent extends Component {
                 this.arrowNode = null;
             }
             // 显示踢小球的哪个部分界面
-            game.emit(Msg.ShowKicking);
-            // this.ball.shoot()
+            // game.emit(Msg.ShowKicking);
+            game.emit(Msg.GotoShoot);
 
         }
 
@@ -107,12 +117,7 @@ export class SceneComponent extends Component {
     }
 
     update(deltaTime: number) {
-        // if (this.camera && this.role) {
-        //     let pox = this.role.node.getPosition();
-        //     let cameraPos = this.camera.node.getPosition();
-        //     cameraPos.x = pox.x;
-        //     this.camera.node.setPosition(cameraPos);
-        // }
+
     }
 }
 

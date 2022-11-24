@@ -1,4 +1,4 @@
-import { _decorator, Component, Node, input, Input, KeyCode, EventKeyboard, Enum, Vec2, EventMouse, UITransform, Quat, TERRAIN_HEIGHT_BASE, Vec3 } from 'cc';
+import { _decorator, Component, Node, input, Input, KeyCode, EventKeyboard, Enum, Vec2, EventMouse, UITransform, Quat, TERRAIN_HEIGHT_BASE, Vec3, tween, randomRange, Camera } from 'cc';
 const { ccclass, property } = _decorator;
 
 enum Horizontal {
@@ -35,7 +35,9 @@ export class GameCamera extends Component {
     enabledFunc = false;
 
     offset = new Vec2();
-
+    getCamera() {
+        return this.node.getComponent(Camera);
+    }
     start() {
         input.on(Input.EventType.KEY_DOWN, (event: EventKeyboard) => {
             if (event.keyCode === KeyCode.KEY_W) {
@@ -100,7 +102,25 @@ export class GameCamera extends Component {
             }
         });
     }
-
+    shake() {
+        let act = tween().target(this.node);
+        const pos = this.node.getPosition();
+        const offset = 0.05;
+        const time = 0.3;
+        const num = 5;
+        for (let i = 0; i < num; i++) {
+            const x = randomRange(-offset, offset);
+            const y = randomRange(-offset, offset);
+            const z = randomRange(-offset, offset);
+            act.to(time / num, { position: pos.clone().add(new Vec3(x, y, z)) }).call(() => {
+                // console.log('pos:', x, y, z)
+            });
+        }
+        act.call(() => {
+            this.node.setPosition(pos)
+        })
+            .start()
+    }
     update(deltaTime: number) {
         if (this.enabledFunc) {
             if (this.type === Type.FlowTarget) {

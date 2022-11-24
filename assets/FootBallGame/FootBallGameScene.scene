@@ -1825,7 +1825,7 @@
   },
   {
     "__type__": "cc.Node",
-    "_name": "script",
+    "_name": "GameScene",
     "_objFlags": 0,
     "_parent": {
       "__id__": 1
@@ -1887,8 +1887,8 @@
     "spaceCollider": {
       "__id__": 93
     },
-    "camera": {
-      "__id__": 6
+    "gameCamera": {
+      "__id__": 7
     },
     "arrowPrefab": {
       "__uuid__": "7d11b912-5cb3-4576-8156-e636f122192d",

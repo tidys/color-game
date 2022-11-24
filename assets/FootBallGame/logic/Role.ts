@@ -1,4 +1,4 @@
-import { _decorator, Component, Node, Input, input, EventKeyboard, KeyCode, RigidBody, Vec3, SkeletalAnimation } from 'cc';
+import { _decorator, Component, Node, Input, input, EventKeyboard, KeyCode, RigidBody, Vec3, SkeletalAnimation, tween } from 'cc';
 import { RoleAnimation } from './RoleAnimation';
 
 const { ccclass, property } = _decorator;
@@ -44,6 +44,17 @@ export class Role extends Component {
         let rolePos = ballPos.add(vec.normalize().multiplyScalar(offsetBallDistance));
         this.node.setPosition(new Vec3(rolePos.x, 0, rolePos.z))
         this.node.forward = vec;
+    }
+    gotoShoot(ballPos: Vec3, cb?: Function) {
+        ballPos.y = 0;
+        this._roleAnimation.walk();
+        tween().target(this.node)
+            .to(0.8, { position: ballPos })
+            .call(() => {
+                this._roleAnimation.stand()
+                cb && cb();
+            })
+            .start()
     }
     start() {
         // input.on(Input.EventType.KEY_DOWN, (event: EventKeyboard) => {
