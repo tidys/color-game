@@ -1,4 +1,5 @@
-import { _decorator, Component, Node, Input, input, EventKeyboard, KeyCode, RigidBody, Vec3, SkeletalAnimation, tween } from 'cc';
+import { _decorator, Component, Node, Input, input, EventKeyboard, KeyCode, RigidBody, Vec3, SkeletalAnimation, tween, BoxCollider, Vec2, game } from 'cc';
+import { Msg } from '../Msg';
 import { RoleAnimation } from './RoleAnimation';
 
 const { ccclass, property } = _decorator;
@@ -15,7 +16,16 @@ enum Vertical {
     Back,
 }
 
-
+export enum Type {
+    None,
+    Keeper,
+    Player,
+}
+export enum Team {
+    None,
+    Read,
+    Blue,
+}
 export const offsetBallDistance = 2;
 @ccclass('Role')
 export class Role extends Component {
@@ -29,9 +39,23 @@ export class Role extends Component {
 
     _roleAnimation: RoleAnimation = null;
 
+    _type: Type = Type.None;
+    _team: Team = Team.None;
+
     onLoad() {
         this._roleAnimation = this.node.addComponent(RoleAnimation);
         this._roleAnimation.initSkeleta(this.skeleta);
+        this.enabledBoxCollider(true);
+
+        game.on(Msg.GameBegan, () => {
+            this._roleAnimation.stand()
+            this.enabledBoxCollider(true);
+
+        })
+    }
+    init(type: Type, team: Team) {
+        this._type = type;
+        this._team = team;
     }
     resetWithPos(ballPos: Vec3, doorPos: Vec3) {
         ballPos.y = 0;
@@ -41,6 +65,23 @@ export class Role extends Component {
         this.node.setPosition(new Vec3(rolePos.x, 0, rolePos.z))
         this.node.forward = vec;
         this._roleAnimation.stand()
+        this.enabledBoxCollider(true);
+    }
+    placeToKeeperPositon(keeperPos) {
+        this.node.setPosition(keeperPos);
+        let v2 = new Vec2(keeperPos.x, keeperPos.z);
+        v2.normalize()
+        this.node.forward = new Vec3(v2.x, 0, v2.y);
+    }
+    enabledBoxCollider(enabled: boolean) {
+        const collider = this.node.getComponent(BoxCollider);
+        if (collider) {
+            collider.enabled = enabled;
+        }
+        const body = this.node.getComponent(RigidBody);
+        if (body) {
+            body.enabled = enabled;
+        }
     }
     arroundBall(ballPos: Vec3, clickPos: Vec3) {
         ballPos.y = 0;
@@ -51,6 +92,7 @@ export class Role extends Component {
         this.node.forward = vec;
     }
     gotoShoot(ballPos: Vec3, cb?: Function) {
+        this.enabledBoxCollider(false);
         ballPos.y = 0;
         this._roleAnimation.walk();
         tween().target(this.node)
@@ -58,6 +100,10 @@ export class Role extends Component {
             .call(() => {
                 this._roleAnimation.stand()
                 cb && cb();
+            })
+            .delay(0.5)
+            .call(() => {
+                this.enabledBoxCollider(true)
             })
             .start()
     }

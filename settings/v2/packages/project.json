@@ -15,6 +15,14 @@
       {
         "index": 2,
         "name": "ground"
+      },
+      {
+        "index": 3,
+        "name": "nothing"
+      },
+      {
+        "index": 4,
+        "name": "door-hole"
       }
     ],
     "defaultMaterial": {
@@ -26,6 +34,13 @@
     "gravity": {
       "y": -10
     },
-    "maxSubSteps": 3
+    "maxSubSteps": 3,
+    "collisionMatrix": {
+      "0": 11,
+      "1": 21,
+      "2": 2,
+      "3": 9,
+      "4": 2
+    }
   }
 }

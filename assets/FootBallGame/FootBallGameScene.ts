@@ -3,7 +3,7 @@ import { footBallGame } from './FootBallGame';
 import { GameCamera } from './FootBallGameCamera';
 import { FootBallGameData } from './FootBallGameData';
 import { Ball } from './logic/Ball';
-import { Role } from './logic/Role'
+import { Role, Team, Type } from './logic/Role'
 import { Msg } from './Msg';
 
 const { ccclass, property } = _decorator;
@@ -15,6 +15,8 @@ export class SceneComponent extends Component {
     rolePrefab: Prefab = null
 
     role: Role = null;
+
+    keeper: Role = null;
 
     @property({ type: Node, displayName: "球门" })
     door: Node = null;
@@ -33,19 +35,23 @@ export class SceneComponent extends Component {
 
     private arrowNode: Node = null;
 
-
+    private sceneRootNode: Node = null;
     start() {
         footBallGame.setFootBall(this.ball);
         footBallGame.reset()
         // game.emit(Msg.ShowKicking);
     }
     onLoad() {
-        const roleNode = instantiate(this.rolePrefab);
-        this.role = roleNode.getComponent(Role);
-        this.node.parent.addChild(roleNode);
+        this.sceneRootNode = this.node.parent;
 
         setDisplayStats(false)
+        // 玩家自己
+        this._initReadPlayer()
+        // 守门员
+        this._initKeeper()
+
         game.on(Msg.ResetGame, () => {
+            game.emit(Msg.GameBegan);
             this.role.resetWithPos(this.ball.node.getPosition(), this.door.getPosition())
             input.off(Input.EventType.TOUCH_START, this.touchToEnsureDirection, this);
             input.on(Input.EventType.TOUCH_START, this.touchToEnsureDirection, this);
@@ -56,6 +62,21 @@ export class SceneComponent extends Component {
                 this.ball.shoot()
             })
         })
+    }
+    private _initReadPlayer() {
+        const roleNode = instantiate(this.rolePrefab);
+        this.role = roleNode.getComponent(Role);
+        this.sceneRootNode.addChild(roleNode);
+        this.role.init(Type.Player, Team.Read);
+
+    }
+    private _initKeeper() {
+        const keeperNode = instantiate(this.rolePrefab);
+        this.keeper = keeperNode.getComponent(Role)
+        this.sceneRootNode.addChild(keeperNode);
+        this.keeper.init(Type.Keeper, Team.Blue);
+        const keeperPos = new Vec3(-50, 0, 0)
+        this.keeper.placeToKeeperPositon(keeperPos)
     }
     private touchToEnsureDirection(event: EventTouch) {
         let ray = new geometry.Ray();
