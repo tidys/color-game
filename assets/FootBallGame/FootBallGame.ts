@@ -1,4 +1,4 @@
-import { game, Scheduler, tween } from "cc";
+import { BoxCollider, game, Scheduler, tween } from "cc";
 import { Ball } from "./logic/Ball"
 import { Msg } from "./Msg";
 
@@ -36,5 +36,6 @@ export class FootBallGame {
         console.log("失败了")
         game.emit(Msg.ResetGame);
     }
+
 }
 export const footBallGame = new FootBallGame()

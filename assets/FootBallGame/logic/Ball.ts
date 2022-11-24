@@ -16,21 +16,22 @@ export class Ball extends Component {
             rigidBody.clearForces();
         }
     }
+    getCollider() {
+        return this.getComponent(SphereCollider);
+    }
     onLoad() {
         game.on(Msg.ResetGame, () => {
             this.resetPosition();
         })
 
         let rigidBody = this.getComponent(RigidBody);
-        let boxCollider = this.getComponent(SphereCollider);
-        if (boxCollider) {
-
-            boxCollider.on("onCollisionEnter", (event: physics.ICollisionEvent) => {
+        let collider = this.getCollider()
+        if (collider) {
+            collider.on("onCollisionEnter", (event: physics.ICollisionEvent) => {
                 // console.log("onCollisionEnter")
                 event.otherCollider;
-
             });
-            boxCollider.on("onTriggerEnter", () => {
+            collider.on("onTriggerEnter", () => {
                 // console.log("onTriggerEnter")
             });
         }

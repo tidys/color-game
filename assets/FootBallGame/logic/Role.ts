@@ -1,6 +1,7 @@
 import { _decorator, Component, Node, Input, input, EventKeyboard, KeyCode, RigidBody, Vec3, SkeletalAnimation, tween, BoxCollider, Vec2, game } from 'cc';
 import { Msg } from '../Msg';
 import { RoleAnimation } from './RoleAnimation';
+import { RoleCfg } from './RoleCfg';
 
 const { ccclass, property } = _decorator;
 
@@ -26,6 +27,15 @@ export enum Team {
     Read,
     Blue,
 }
+
+const Group = {
+    Default: 1 << 0,
+    Ball: 1 << 1,
+    Ground: 1 << 2,
+    Nothing: 1 << 3,
+    DoorHole: 1 << 4,
+}
+
 export const offsetBallDistance = 2;
 @ccclass('Role')
 export class Role extends Component {
@@ -34,9 +44,6 @@ export class Role extends Component {
     vertical: Vertical = Vertical.None;
     speed = 0.1;
 
-    @property(SkeletalAnimation)
-    skeleta: SkeletalAnimation = null;
-
     _roleAnimation: RoleAnimation = null;
 
     _type: Type = Type.None;
@@ -44,14 +51,27 @@ export class Role extends Component {
 
     onLoad() {
         this._roleAnimation = this.node.addComponent(RoleAnimation);
-        this._roleAnimation.initSkeleta(this.skeleta);
+        const cfg = this.node.getComponent(RoleCfg)
+        this._roleAnimation.initSkeleta(cfg.skeleta);
         this.enabledBoxCollider(true);
 
         game.on(Msg.GameBegan, () => {
             this._roleAnimation.stand()
             this.enabledBoxCollider(true);
-
         })
+        this.setNothingGroup()
+    }
+    setDefaultGroup() {
+        this._updateGroup(Group.Default);
+    }
+    setNothingGroup() {
+        this._updateGroup(Group.Nothing)
+    }
+    private _updateGroup(group) {
+        const rigidBody = this.getComponent(RigidBody);
+        if (rigidBody) {
+            rigidBody.group = group;
+        }
     }
     init(type: Type, team: Team) {
         this._type = type;
@@ -66,12 +86,6 @@ export class Role extends Component {
         this.node.forward = vec;
         this._roleAnimation.stand()
         this.enabledBoxCollider(true);
-    }
-    placeToKeeperPositon(keeperPos) {
-        this.node.setPosition(keeperPos);
-        let v2 = new Vec2(keeperPos.x, keeperPos.z);
-        v2.normalize()
-        this.node.forward = new Vec3(v2.x, 0, v2.y);
     }
     enabledBoxCollider(enabled: boolean) {
         const collider = this.node.getComponent(BoxCollider);

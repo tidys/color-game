@@ -4,6 +4,7 @@ import { GameCamera } from './FootBallGameCamera';
 import { FootBallGameData } from './FootBallGameData';
 import { Ball } from './logic/Ball';
 import { Role, Team, Type } from './logic/Role'
+import { RoleKeeper } from './logic/RoleKeeper';
 import { Msg } from './Msg';
 
 const { ccclass, property } = _decorator;
@@ -16,7 +17,7 @@ export class SceneComponent extends Component {
 
     role: Role = null;
 
-    keeper: Role = null;
+    keeper: RoleKeeper = null;
 
     @property({ type: Node, displayName: "球门" })
     door: Node = null;
@@ -65,14 +66,22 @@ export class SceneComponent extends Component {
     }
     private _initReadPlayer() {
         const roleNode = instantiate(this.rolePrefab);
-        this.role = roleNode.getComponent(Role);
+        let script = roleNode.getComponent(Role);
+        if (!script) {
+            script = roleNode.addComponent(Role)
+        }
+        this.role = script;
         this.sceneRootNode.addChild(roleNode);
         this.role.init(Type.Player, Team.Read);
 
     }
     private _initKeeper() {
         const keeperNode = instantiate(this.rolePrefab);
-        this.keeper = keeperNode.getComponent(Role)
+        let script = keeperNode.getComponent(RoleKeeper)
+        if (!script) {
+            script = keeperNode.addComponent(RoleKeeper);
+        }
+        this.keeper = script;
         this.sceneRootNode.addChild(keeperNode);
         this.keeper.init(Type.Keeper, Team.Blue);
         const keeperPos = new Vec3(-50, 0, 0)
