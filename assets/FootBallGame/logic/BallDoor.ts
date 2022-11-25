@@ -17,11 +17,6 @@ export class BallDoor extends Component {
             this.collider.on("onCollisionEnter", this.onShootingIn, this)
             this.collider.on("onTriggerEnter", this.onShootingIn, this)
         })
-        game.on(Msg.ShootingIn, () => {
-            tween().target(this).delay(1).call(() => {
-                footBallGame.reset()
-            }).start()
-        })
     }
 
     update(deltaTime: number) {

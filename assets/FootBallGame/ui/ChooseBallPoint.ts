@@ -23,7 +23,8 @@ export class ChooseBallPoint extends UIBase {
             this.hand.active = true;
             this.text.node.active = true;
             this.text.string = text;
-            this.hand.setPosition(new Vec3(pos.x, pos.y, 0))
+            const transfrom = this.ball.getComponent(UITransform);
+            this.hand.setPosition(new Vec3(pos.x * transfrom.width / 2, pos.y * transfrom.height / 2, 0))
 
             const ani = this.hand.getComponent(Animation)
             if (ani) {

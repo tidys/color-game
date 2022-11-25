@@ -17,7 +17,7 @@ export class Level extends UIBase {
         for (let i = 0; i < size; i++) {
             const node = instantiate(this.item);
             const cfg = LevelConfigs[i];
-            node.getComponent(LevelItem).initData(cfg.id);
+            node.getComponent(LevelItem).initData(i + 1, cfg.id);
             this.contentNode.addChild(node);
         }
     }

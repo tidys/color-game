@@ -6,7 +6,7 @@ export class FootBallGameData {
     static OffsetY: number = 0;// 挑球：决定球的上下，取值[0,1]
     static Direction: Vec3 = new Vec3()
     static enabledBanana = true;
-    // 橡胶球的方向
+    // 香蕉球的方向
     static getBananaVec() {
         //没有y:(x,0,z)
         let v2 = new Vec2(this.Direction.x, this.Direction.z);
@@ -25,9 +25,9 @@ export class FootBallGameData {
     static getJump() {
         const mul = 2;
         let y = this.OffsetY * mul;
-        // x,y方向的值都是[0,1]，最终值落在[0.5,2]
+        // x,y方向的值都是[0,1]，最终值落在[0.3,2]
         y = Math.min(y, 2);
-        y = Math.max(0.5, y);
+        y = Math.max(0.3, y);
         return y;
     }
     static getShortForce() {

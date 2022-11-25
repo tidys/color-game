@@ -1,4 +1,4 @@
-import { _decorator, EventTarget, Event, game, Component, Input, Label } from "cc"
+import { _decorator, EventTarget, Event, game, Component, Input, Label, input } from "cc"
 import { footBallGame } from "../FootBallGame";
 import { Msg } from "../Msg";
 import { UIBase } from "./UIBase";
@@ -9,12 +9,17 @@ const { ccclass, property } = _decorator;
 export class TipsDirectionAndForce extends UIBase {
     @property(Label)
     text: Label = null;
+
+    private _func = null;
     start() {
-        this.node.on(Input.EventType.TOUCH_START, () => {
+        this._func = input.on(Input.EventType.TOUCH_START, () => {
             this.node.removeFromParent()
         })
         const cfg = footBallGame.getLevelConfig();
         this.text.string = cfg.tips.scene.text;
+    }
+    onDestroy() {
+        input.off(this._func)
     }
 
 }

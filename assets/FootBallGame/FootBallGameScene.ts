@@ -67,7 +67,6 @@ export class SceneComponent extends Component {
             })
         })
         game.on(Msg.EnterLevel, (levelID?: number) => {
-            footBallGame.reset()
             const cfg = footBallGame.getLevelConfig();
             // 守门员
             if (cfg.keeper) {
@@ -78,6 +77,12 @@ export class SceneComponent extends Component {
             if (cfg.tips?.scene) {
                 game.emit(Msg.ShowUI, { type: UIType.TipsDirectionAndForce });
             }
+            footBallGame.reset()
+        })
+        game.on(Msg.ShootingIn, () => {
+            tween().target(this).delay(1).call(() => {
+                game.emit(Msg.ShowUI, { type: UIType.Level })
+            }).start()
         })
         this._initShortKey()
     }

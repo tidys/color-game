@@ -12,7 +12,8 @@ export class Ball extends Component {
     resetPosition() {
         const cfg = footBallGame.getLevelConfig();
         this.node.setParent(footBallGame.worldNode)
-        this.node.setPosition(cfg.ball.position);
+        let pos = cfg.ball?.position || new Vec3(-40, 1, 0);
+        this.node.setPosition(pos);
         this.releaseForce()
         this.setStatic(false)
     }

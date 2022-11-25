@@ -20,9 +20,10 @@ export class LevelItem extends Component {
     update(deltaTime: number) {
 
     }
-    initData(id) {
+    initData(index, id) {
         this.levelID = id;
-        this.text.string = this.levelID.toString();
+        // this.text.string = this.levelID.toString();
+        this.text.string = index.toString()
     }
 }
 
