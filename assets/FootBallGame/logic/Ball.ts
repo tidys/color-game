@@ -49,12 +49,9 @@ export class Ball extends Component {
     }
     shoot() {
         const rigidBody = this.getComponent(RigidBody);
-        const y = FootBallGameData.getJump();
-        let force = new Vec3(FootBallGameData.Direction.x, y, FootBallGameData.Direction.z);
-        force.normalize().multiplyScalar(FootBallGameData.Force);
+        const force = FootBallGameData.getShortForce();
         footBallGame.setGameState(GameState.BallMoving);
         rigidBody.wakeUp();
-
         // rigidBody.applyForce(new Vec3(-6000, 0, 0));// 添加一个可持续力
         // rigidBody.applyTorque(new Vec3(1, v, 1))
         rigidBody.applyImpulse(force, new Vec3(0, 0, 0));// 添加一个瞬间冲击力，

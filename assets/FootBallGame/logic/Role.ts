@@ -36,7 +36,7 @@ const Group = {
     DoorHole: 1 << 4,
 }
 
-export const offsetBallDistance = 2;
+export const offsetBallDistance = 4;
 @ccclass('Role')
 export class Role extends Component {
     isWalking = false;

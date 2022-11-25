@@ -65,6 +65,14 @@ export class SceneComponent extends Component {
                 this.ball.shoot()
             })
         })
+        this._initShortKey()
+    }
+    private _initShortKey() {
+        input.on(Input.EventType.KEY_DOWN, (event: EventKeyboard) => {
+            if (event.keyCode === KeyCode.KEY_R) {
+                footBallGame.reset()
+            }
+        })
     }
     private _initReadPlayer() {
         const roleNode = instantiate(this.rolePrefab);
@@ -121,13 +129,17 @@ export class SceneComponent extends Component {
                 // 点击到了球场
                 if (result.collider === this.spaceCollider) {
                     const touchVec2 = new Vec2(result.hitPoint.x, result.hitPoint.z);
+                    let distance = Vec2.distance(touchVec2, arrowPosVec2);
+
                     let vec = arrowPosVec2.subtract(touchVec2);
                     this.arrowNode.forward = new Vec3(vec.x, 0, vec.y);
                     const scale = this.arrowNode.getScale();
                     scale.z = vec.length() + 2;
                     this.arrowNode.setScale(scale);
-
                     this.role.arroundBall(this.ball.node.getPosition(), result.hitPoint)
+                    console.log(distance)
+                    FootBallGameData.Force = distance;
+                    FootBallGameData.Direction = this.arrowNode.forward;
                 }
             }
         }
@@ -136,11 +148,9 @@ export class SceneComponent extends Component {
         const touchMove = (event: EventTouch) => {
             this.updateArrowForward(event);
         };
-        const touchEnd = () => {
+        const touchEnd = (event: EventTouch) => {
             input.off(Input.EventType.TOUCH_MOVE, touchMove);
             input.off(Input.EventType.TOUCH_END, touchEnd);
-            FootBallGameData.Direction = this.arrowNode.forward;
-            FootBallGameData.Force;
             if (this.arrowNode) {
                 this.arrowNode.removeFromParent()
                 this.arrowNode = null;
