@@ -41,18 +41,18 @@ export class SceneComponent extends Component {
     start() {
         footBallGame.setFootBall(this.ball);
         footBallGame.setMainCamera(this.gameCamera);
-        footBallGame.reset()
+
         // game.emit(Msg.ShowKicking);
+        game.emit(Msg.ShowUI, { type: UIType.WellCome } as UIOptions)
     }
     onLoad() {
         this.sceneRootNode = this.node.parent;
         footBallGame.worldNode = this.sceneRootNode;
 
         setDisplayStats(false)
+
         // 玩家自己
         this._initReadPlayer()
-        // 守门员
-        this._initKeeper();
 
         game.on(Msg.ResetGame, () => {
             game.emit(Msg.GameBegan);
@@ -65,6 +65,19 @@ export class SceneComponent extends Component {
                 this.gameCamera.shake();
                 this.ball.shoot()
             })
+        })
+        game.on(Msg.EnterLevel, (levelID?: number) => {
+            footBallGame.reset()
+            const cfg = footBallGame.getLevelConfig();
+            // 守门员
+            if (cfg.keeper) {
+                this._createKeeper();
+            } else {
+                this._removeKeeper()
+            }
+            if (cfg.tips?.scene) {
+                game.emit(Msg.ShowUI, { type: UIType.TipsDirectionAndForce });
+            }
         })
         this._initShortKey()
     }
@@ -86,14 +99,22 @@ export class SceneComponent extends Component {
         this.role.init(Type.Player, Team.Read);
 
     }
-    private _initKeeper() {
-        const keeperNode = instantiate(this.rolePrefab);
-        let script = keeperNode.getComponent(RoleKeeper)
-        if (!script) {
-            script = keeperNode.addComponent(RoleKeeper);
+    private _removeKeeper() {
+        if (this.keeper) {
+            this.keeper.node.removeFromParent();
+            this.keeper = null;
         }
-        this.keeper = script;
-        this.sceneRootNode.addChild(keeperNode);
+    }
+    private _createKeeper() {
+        if (!this.keeper) {
+            const keeperNode = instantiate(this.rolePrefab);
+            let script = keeperNode.getComponent(RoleKeeper)
+            if (!script) {
+                script = keeperNode.addComponent(RoleKeeper);
+            }
+            this.keeper = script;
+            this.sceneRootNode.addChild(keeperNode);
+        }
         this.keeper.init(Type.Keeper, Team.Blue);
     }
     private touchToEnsureDirection(event: EventTouch) {

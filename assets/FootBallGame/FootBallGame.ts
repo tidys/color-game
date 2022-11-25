@@ -1,5 +1,6 @@
 import { BoxCollider, game, Scheduler, tween, Node } from "cc";
 import { GameCamera } from "./FootBallGameCamera";
+import { ILevelConfig, LevelConfigs, getLevelConfig } from "./LevelData";
 import { Ball } from "./logic/Ball"
 import { Msg } from "./Msg";
 
@@ -12,6 +13,19 @@ export class FootBallGame {
     private ball: Ball = null;
     private camera: GameCamera = null;
     private _state: GameState = GameState.ReadyShoot;
+    private _levelConfig: ILevelConfig = null;
+    getLevelConfig() {
+        return this._levelConfig;
+    }
+    setLevelID(id) {
+        this._levelConfig = getLevelConfig(id)
+    }
+    isGamePlaying() {
+        return this._state !== GameState.Result;
+    }
+    setGameFinish() {
+        this._state = GameState.Result;
+    }
     setGameState(state: GameState) {
         this._state = state;
     }

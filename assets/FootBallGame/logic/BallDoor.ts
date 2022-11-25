@@ -19,7 +19,7 @@ export class BallDoor extends Component {
         })
         game.on(Msg.ShootingIn, () => {
             tween().target(this).delay(1).call(() => {
-                game.emit(Msg.ResetGame);
+                footBallGame.reset()
             }).start()
         })
     }

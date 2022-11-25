@@ -2076,6 +2076,14 @@
       "__uuid__": "788c23e2-8e7b-4e3a-891a-40dffb8507bb",
       "__expectedType__": "cc.Prefab"
     },
+    "levelPrefab": {
+      "__uuid__": "af2a583c-20a3-4785-a204-f3f9fd8ab222",
+      "__expectedType__": "cc.Prefab"
+    },
+    "wellCome": {
+      "__uuid__": "bd0f53b0-7c91-404e-9bbe-091ff2748a37",
+      "__expectedType__": "cc.Prefab"
+    },
     "_id": "49D5ptCoxIkr6zRQbwYNhp"
   },
   {

@@ -5,4 +5,5 @@ export const Msg = {
     GotoShoot: "GotoShoot",
     ShowUI: "ShowUI",
     CleanUI: "CleanUI",
+    EnterLevel: "EnterLevel",
 }

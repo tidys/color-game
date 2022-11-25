@@ -15,10 +15,13 @@ export class Gym extends Component {
             collider.on("onTriggerEnter", (event: ITriggerEvent) => {
                 const ballCollider = footBallGame.getFootBall().getCollider();
                 if (event.otherCollider === ballCollider) {
-                    console.log('出界了')
-                    tween().target(this.node).delay(1).call(() => {
-                        footBallGame.failed();
-                    }).start()
+                    if (footBallGame.isGamePlaying()) {
+                        footBallGame.setGameFinish()
+                        console.log('出界了')
+                        tween().target(this.node).delay(1).call(() => {
+                            footBallGame.failed();
+                        }).start()
+                    }
                 }
             })
         }

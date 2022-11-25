@@ -1,4 +1,4 @@
-import { _decorator, Component, Node, Input, EventTouch, UITransform, Vec3, game } from 'cc';
+import { _decorator, Component, Node, Input, EventTouch, UITransform, Vec3, game, Label, Animation } from 'cc';
 import { footBallGame } from '../FootBallGame';
 import { FootBallGameData } from '../FootBallGameData';
 import { Msg } from '../Msg';
@@ -10,7 +10,31 @@ export class ChooseBallPoint extends UIBase {
     @property(Node)
     ball: Node = null;
 
+    @property(Label)
+    text: Label = null;
+
+    @property(Node)
+    hand: Node = null;
+
     start() {
+        const cfg = footBallGame.getLevelConfig();
+        if (cfg.tips?.ball) {
+            const { pos, text } = cfg.tips.ball;
+            this.hand.active = true;
+            this.text.node.active = true;
+            this.text.string = text;
+            this.hand.setPosition(new Vec3(pos.x, pos.y, 0))
+
+            const ani = this.hand.getComponent(Animation)
+            if (ani) {
+                ani.play();
+            }
+        } else {
+            this.text.node.active = false;
+            this.hand.active = false;
+        }
+
+
         this.ball.on(Input.EventType.TOUCH_START, (event: EventTouch) => {
             // 标记点击位置
         })

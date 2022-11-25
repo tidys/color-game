@@ -10,8 +10,9 @@ export class Ball extends Component {
     private rigidBody: RigidBody = null;
     private collider: Collider = null;
     resetPosition() {
+        const cfg = footBallGame.getLevelConfig();
         this.node.setParent(footBallGame.worldNode)
-        this.node.setPosition(new Vec3(-40, 1, 0));
+        this.node.setPosition(cfg.ball.position);
         this.releaseForce()
         this.setStatic(false)
     }
