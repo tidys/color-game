@@ -17,7 +17,7 @@ export class GM extends Component {
 
         })
         this.offsetSlider.setCalcFunc((val: number) => {
-            FootBallGameData.Offset = 0 / val;
+            FootBallGameData.OffsetX = 0 / val;
         })
     }
 
@@ -32,6 +32,9 @@ export class GM extends Component {
     }
     updateOffset() {
 
+    }
+    onShoot() {
+        footBallGame.getFootBall().shoot();
     }
 }
 

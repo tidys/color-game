@@ -39,17 +39,19 @@ export class SceneComponent extends Component {
     private sceneRootNode: Node = null;
     start() {
         footBallGame.setFootBall(this.ball);
+        footBallGame.setMainCamera(this.gameCamera);
         footBallGame.reset()
         // game.emit(Msg.ShowKicking);
     }
     onLoad() {
         this.sceneRootNode = this.node.parent;
+        footBallGame.worldNode = this.sceneRootNode;
 
         setDisplayStats(false)
         // 玩家自己
         this._initReadPlayer()
         // 守门员
-        this._initKeeper()
+        this._initKeeper();
 
         game.on(Msg.ResetGame, () => {
             game.emit(Msg.GameBegan);
@@ -84,10 +86,9 @@ export class SceneComponent extends Component {
         this.keeper = script;
         this.sceneRootNode.addChild(keeperNode);
         this.keeper.init(Type.Keeper, Team.Blue);
-        const keeperPos = new Vec3(-50, 0, 0)
-        this.keeper.placeToKeeperPositon(keeperPos)
     }
     private touchToEnsureDirection(event: EventTouch) {
+        this.role.rigidBodyStatic();
         let ray = new geometry.Ray();
         this.gameCamera.getCamera().screenPointToRay(event.getLocationX(), event.getLocationY(), ray);
 
@@ -144,10 +145,11 @@ export class SceneComponent extends Component {
                 this.arrowNode.removeFromParent()
                 this.arrowNode = null;
             }
-            // 显示踢小球的哪个部分界面
-            // game.emit(Msg.ShowKicking);
-            game.emit(Msg.GotoShoot);
+            this.role.rigidBodyDynamic();
 
+            // 显示踢小球的哪个部分界面
+            game.emit(Msg.ShowKicking);
+            // game.emit(Msg.GotoShoot);
         }
 
         input.on(Input.EventType.TOUCH_MOVE, touchMove);

@@ -1,4 +1,4 @@
-import { _decorator, Component, Node, Input, input, EventKeyboard, KeyCode, RigidBody, Vec3, SkeletalAnimation, tween, BoxCollider, Vec2, game } from 'cc';
+import { _decorator, Component, Node, Input, input, EventKeyboard, KeyCode, RigidBody, Vec3, SkeletalAnimation, tween, BoxCollider, Vec2, game, MeshCollider, Collider, ERigidBodyType } from 'cc';
 import { Msg } from '../Msg';
 import { RoleAnimation } from './RoleAnimation';
 import { RoleCfg } from './RoleCfg';
@@ -48,18 +48,35 @@ export class Role extends Component {
 
     _type: Type = Type.None;
     _team: Team = Team.None;
+    collider: Collider | null = null;
+    rigidBody: RigidBody | null = null;
+    protected height = 1.8;// 身高
+    protected mass = 3000;// 体重
+
+    @property(Node)
+    handBallNode: Node = null;
 
     onLoad() {
         this._roleAnimation = this.node.addComponent(RoleAnimation);
         const cfg = this.node.getComponent(RoleCfg)
         this._roleAnimation.initSkeleta(cfg.skeleta);
         this.enabledBoxCollider(true);
+        this.collider = cfg.collider;
+        this.rigidBody = cfg.rigidBody;
+        this.handBallNode = cfg.handBallNode;
 
+        this.rigidBody.mass = this.mass;
         game.on(Msg.GameBegan, () => {
             this._roleAnimation.stand()
             this.enabledBoxCollider(true);
         })
         this.setNothingGroup()
+    }
+    rigidBodyStatic() {
+        this.rigidBody.type = ERigidBodyType.STATIC;
+    }
+    rigidBodyDynamic() {
+        this.rigidBody.type = ERigidBodyType.DYNAMIC;
     }
     setDefaultGroup() {
         this._updateGroup(Group.Default);
@@ -82,32 +99,27 @@ export class Role extends Component {
         doorPos.y = 0;
         let vec: Vec3 = ballPos.clone().subtract(doorPos.clone());
         let rolePos = ballPos.add(vec.normalize().multiplyScalar(offsetBallDistance));
-        this.node.setPosition(new Vec3(rolePos.x, 0, rolePos.z))
+        this.node.setPosition(new Vec3(rolePos.x, this.height / 2, rolePos.z))
         this.node.forward = vec;
         this._roleAnimation.stand()
         this.enabledBoxCollider(true);
     }
+
     enabledBoxCollider(enabled: boolean) {
-        const collider = this.node.getComponent(BoxCollider);
-        if (collider) {
-            collider.enabled = enabled;
-        }
-        const body = this.node.getComponent(RigidBody);
-        if (body) {
-            body.enabled = enabled;
-        }
+        this.collider && (this.collider.enabled = enabled);
+        this.rigidBody && (this.rigidBody.enabled = enabled);
     }
     arroundBall(ballPos: Vec3, clickPos: Vec3) {
         ballPos.y = 0;
         clickPos.y = 0;
         let vec = clickPos.subtract(ballPos)
         let rolePos = ballPos.add(vec.normalize().multiplyScalar(offsetBallDistance));
-        this.node.setPosition(new Vec3(rolePos.x, 0, rolePos.z))
+        this.node.setPosition(new Vec3(rolePos.x, this.height / 2, rolePos.z))
         this.node.forward = vec;
     }
     gotoShoot(ballPos: Vec3, cb?: Function) {
         this.enabledBoxCollider(false);
-        ballPos.y = 0;
+        ballPos.y = this.height / 2;
         this._roleAnimation.walk();
         tween().target(this.node)
             .to(0.8, { position: ballPos })

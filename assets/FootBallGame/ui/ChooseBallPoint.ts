@@ -1,5 +1,6 @@
 import { _decorator, Component, Node, Input, EventTouch, UITransform, Vec3, game } from 'cc';
 import { footBallGame } from '../FootBallGame';
+import { FootBallGameData } from '../FootBallGameData';
 import { Msg } from '../Msg';
 const { ccclass, property } = _decorator;
 
@@ -18,9 +19,16 @@ export class ChooseBallPoint extends Component {
             if (transtorm.hitTest(pos)) {
                 // console.log('点中了', pos)
                 let ret = transtorm.convertToNodeSpaceAR(new Vec3(pos.x, pos.y, 0));
-                // console.log(ret)
-                footBallGame.getFootBall()?.shoot();
+                FootBallGameData.OffsetX = ret.x / (transtorm.width / 2);
+                if (ret.y > 0) {
+                    // 踢中球的上半部分，球只能往前
+                    FootBallGameData.OffsetY = 0;
+                } else {
+                    // 踢中球的下半部分，球会挑起来
+                    FootBallGameData.OffsetY = Math.abs(ret.y) / (transtorm.height / 2);
+                }
                 game.emit(Msg.HideKiching)
+                game.emit(Msg.GotoShoot);
             }
         });
     }

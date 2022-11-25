@@ -1,4 +1,4 @@
-import { _decorator, Component, Node, BoxCollider, SphereCollider, physics, RigidBody, Vec3, math, input, Input, Camera, EventTouch, geometry, PhysicsSystem, UITransform, Prefab, instantiate, Mat3, Mat4, tween, EventKeyboard, KeyCode, Quat, game, Vec2, PlaneCollider } from 'cc';
+import { _decorator, Component, Node, BoxCollider, SphereCollider, physics, RigidBody, Vec3, math, input, Input, Camera, EventTouch, geometry, PhysicsSystem, UITransform, Prefab, instantiate, Mat3, Mat4, tween, EventKeyboard, KeyCode, Quat, game, Vec2, PlaneCollider, Collider, ERigidBodyType } from 'cc';
 import { footBallGame, GameState } from '../FootBallGame';
 import { FootBallGameData } from '../FootBallGameData';
 import { Msg } from '../Msg';
@@ -7,38 +7,50 @@ const { ccclass, property } = _decorator;
 
 @ccclass('Ball')
 export class Ball extends Component {
-
+    private rigidBody: RigidBody = null;
+    private collider: Collider = null;
     resetPosition() {
-        this.node.setPosition(new Vec3(-44, 1, 0));
+        this.node.setParent(footBallGame.worldNode)
+        this.node.setPosition(new Vec3(-40, 1, 0));
+        this.releaseForce()
+        this.setStatic(false)
+    }
+    releaseForce() {
         let rigidBody = this.node.getComponent(RigidBody);
         if (rigidBody) {
             rigidBody.clearVelocity()
             rigidBody.clearForces();
+            rigidBody.clearState()
         }
     }
+
+    setStatic(b) {
+        if (b) {
+            this.rigidBody.type = ERigidBodyType.STATIC;
+            this.rigidBody.enabled = false;
+            this.collider.enabled = false;
+        } else {
+            this.rigidBody.type = ERigidBodyType.DYNAMIC;
+            this.rigidBody.enabled = true;
+            this.collider.enabled = true;
+        }
+
+    }
     getCollider() {
-        return this.getComponent(SphereCollider);
+        return this.collider;
     }
     onLoad() {
         game.on(Msg.ResetGame, () => {
             this.resetPosition();
         })
 
-        let rigidBody = this.getComponent(RigidBody);
-        let collider = this.getCollider()
-        if (collider) {
-            collider.on("onCollisionEnter", (event: physics.ICollisionEvent) => {
-                // console.log("onCollisionEnter")
-                event.otherCollider;
-            });
-            collider.on("onTriggerEnter", () => {
-                // console.log("onTriggerEnter")
-            });
-        }
+        this.rigidBody = this.getComponent(RigidBody);
+        this.collider = this.getComponent(SphereCollider)
     }
     shoot() {
         const rigidBody = this.getComponent(RigidBody);
-        let force = new Vec3(FootBallGameData.Direction.x, 0.4, FootBallGameData.Direction.z);
+        const y = FootBallGameData.getJump();
+        let force = new Vec3(FootBallGameData.Direction.x, y, FootBallGameData.Direction.z);
         force.normalize().multiplyScalar(FootBallGameData.Force);
         footBallGame.setGameState(GameState.BallMoving);
         rigidBody.wakeUp();
@@ -50,12 +62,14 @@ export class Ball extends Component {
 
     update(deltaTime: number) {
         if (footBallGame.getGameState() === GameState.BallMoving) {
-            let rigidBody = this.node.getComponent(RigidBody);
-            if (rigidBody.isSleeping) {
+            if (this.rigidBody.isSleeping) {
                 footBallGame.failed()
             } else {
-                // 运动的过程中施加一个瞬时力来实现香蕉球
-                // rigidBody.applyImpulse(new Vec3(FootBallGameData.Offset, 0, 0));
+                if (FootBallGameData.enabledBanana) {
+                    // 运动的过程中施加一个瞬时力来实现香蕉球，方向为人与球方向的法线
+                    const v = FootBallGameData.getBananaVec()
+                    this.rigidBody.applyImpulse(v);
+                }
             }
         } else {
 

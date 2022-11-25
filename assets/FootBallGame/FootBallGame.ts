@@ -1,4 +1,5 @@
-import { BoxCollider, game, Scheduler, tween } from "cc";
+import { BoxCollider, game, Scheduler, tween, Node } from "cc";
+import { GameCamera } from "./FootBallGameCamera";
 import { Ball } from "./logic/Ball"
 import { Msg } from "./Msg";
 
@@ -9,6 +10,7 @@ export enum GameState {
 }
 export class FootBallGame {
     private ball: Ball = null;
+    private camera: GameCamera = null;
     private _state: GameState = GameState.ReadyShoot;
     setGameState(state: GameState) {
         this._state = state;
@@ -19,9 +21,16 @@ export class FootBallGame {
     setFootBall(ball: Ball) {
         this.ball = ball;
     }
+    setMainCamera(camera: GameCamera) {
+        this.camera = camera;
+    }
+    getMainCamera() {
+        return this.camera;
+    }
     getFootBall() {
         return this.ball;
     }
+    public worldNode: Node = null;
     reset() {
         this._state = GameState.ReadyShoot;
         game.emit(Msg.ResetGame);
