@@ -137,7 +137,6 @@ export class SceneComponent extends Component {
                     scale.z = vec.length() + 2;
                     this.arrowNode.setScale(scale);
                     this.role.arroundBall(this.ball.node.getPosition(), result.hitPoint)
-                    console.log(distance)
                     FootBallGameData.Force = distance;
                     FootBallGameData.Direction = this.arrowNode.forward;
                 }

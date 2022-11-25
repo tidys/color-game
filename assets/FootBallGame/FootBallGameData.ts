@@ -33,13 +33,12 @@ export class FootBallGameData {
     static getShortForce() {
         let y = this.getJump();
         let force = new Vec3(this.Direction.x, y, this.Direction.z);
-        let process = this.Force / 20;
+        let process = this.Force / 10;
         if (process >= 1) {
             process = 1;
         }
         const scalar = lerp(20, 200, process)
         force.normalize().multiplyScalar(scalar);
-        console.log(force)
         return force;
     }
 }
