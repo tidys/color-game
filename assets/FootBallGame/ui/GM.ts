@@ -1,7 +1,7 @@
 import { _decorator, Component, Node } from 'cc';
 import { footBallGame } from '../FootBallGame';
 import { FootBallGameData } from '../FootBallGameData';
-import { GameSlider } from './GameSlider';
+import { GameSlider } from '../gm/GameSlider';
 const { ccclass, property } = _decorator;
 
 @ccclass('GM')

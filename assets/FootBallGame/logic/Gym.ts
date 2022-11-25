@@ -1,4 +1,4 @@
-import { _decorator, Component, Node, BoxCollider, ITriggerEvent } from 'cc';
+import { _decorator, Component, Node, BoxCollider, ITriggerEvent, tween } from 'cc';
 import { footBallGame } from '../FootBallGame';
 const { ccclass, property } = _decorator;
 
@@ -16,7 +16,9 @@ export class Gym extends Component {
                 const ballCollider = footBallGame.getFootBall().getCollider();
                 if (event.otherCollider === ballCollider) {
                     console.log('出界了')
-                    footBallGame.failed();
+                    tween().target(this.node).delay(1).call(() => {
+                        footBallGame.failed();
+                    }).start()
                 }
             })
         }

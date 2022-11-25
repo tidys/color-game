@@ -6,6 +6,7 @@ import { Ball } from './logic/Ball';
 import { Role, Team, Type } from './logic/Role'
 import { RoleKeeper } from './logic/RoleKeeper';
 import { Msg } from './Msg';
+import { UIOptions, UIType } from './ui/UI';
 
 const { ccclass, property } = _decorator;
 
@@ -157,7 +158,7 @@ export class SceneComponent extends Component {
             this.role.rigidBodyDynamic();
 
             // 显示踢小球的哪个部分界面
-            game.emit(Msg.ShowKicking);
+            game.emit(Msg.ShowUI, { type: UIType.Kicking } as UIOptions);
             // game.emit(Msg.GotoShoot);
         }
 

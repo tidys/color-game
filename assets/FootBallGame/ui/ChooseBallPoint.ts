@@ -2,10 +2,11 @@ import { _decorator, Component, Node, Input, EventTouch, UITransform, Vec3, game
 import { footBallGame } from '../FootBallGame';
 import { FootBallGameData } from '../FootBallGameData';
 import { Msg } from '../Msg';
+import { UIBase } from './UIBase';
 const { ccclass, property } = _decorator;
 
 @ccclass('ChooseBallPoint')
-export class ChooseBallPoint extends Component {
+export class ChooseBallPoint extends UIBase {
     @property(Node)
     ball: Node = null;
 
@@ -27,7 +28,7 @@ export class ChooseBallPoint extends Component {
                     // 踢中球的下半部分，球会挑起来
                     FootBallGameData.OffsetY = Math.abs(ret.y) / (transtorm.height / 2);
                 }
-                game.emit(Msg.HideKiching)
+                game.emit(Msg.CleanUI)
                 game.emit(Msg.GotoShoot);
             }
         });
