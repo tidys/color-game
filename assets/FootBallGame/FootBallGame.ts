@@ -5,9 +5,9 @@ import { Ball } from "./logic/Ball"
 import { Msg } from "./Msg";
 
 export enum GameState {
-    ReadyShoot,
-    BallMoving,
-    Result,
+    ReadyShoot = "ReadyShoot",
+    BallMoving = "BallMoving",
+    Result = "Result",
 }
 export class FootBallGame {
     public isDesign = false;

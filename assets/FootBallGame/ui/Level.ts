@@ -25,5 +25,9 @@ export class Level extends UIBase {
     update(deltaTime: number) {
 
     }
+    onEnable() {
+    }
+    onDisable() {
+    }
 }
 

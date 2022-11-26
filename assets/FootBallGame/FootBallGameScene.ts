@@ -47,8 +47,8 @@ export class SceneComponent extends Component {
         footBallGame.setMainCamera(this.gameCamera);
 
         // game.emit(Msg.ShowKicking);
-        // game.emit(Msg.ShowUI, { type: UIType.WellCome } as UIOptions)
-        game.emit(Msg.EnterLevel, 10)
+        game.emit(Msg.ShowUI, { type: UIType.WellCome } as UIOptions)
+        // game.emit(Msg.EnterLevel, 10)
     }
     onLoad() {
         this.sceneRootNode = this.node.parent;
@@ -146,14 +146,14 @@ export class SceneComponent extends Component {
     }
     private _removeKeeper() {
         if (this.keeper) {
-            this.keeper.node.removeFromParent();
+            this.keeper.node.destroy();
             this.keeper = null;
         }
     }
     private _removeBlocks() {
         for (let i = 0; i < this.blocks.length; i++) {
             const block = this.blocks[i];
-            block.node.removeFromParent()
+            block.node.destroy()
         }
         this.blocks = []
     }
@@ -242,7 +242,7 @@ export class SceneComponent extends Component {
             input.off(Input.EventType.TOUCH_MOVE, touchMove);
             input.off(Input.EventType.TOUCH_END, touchEnd);
             if (this.arrowNode) {
-                this.arrowNode.removeFromParent()
+                this.arrowNode.destroy()
                 this.arrowNode = null;
             }
             this.role.rigidBodyDynamic();

@@ -13,9 +13,13 @@ export class UIBase extends Component {
         widget.top = widget.bottom = widget.left = widget.right = 0;
 
     }
-
     update(deltaTime: number) {
 
+    }
+
+    onDestroy() {
+    }
+    onDisable() {
     }
 }
 

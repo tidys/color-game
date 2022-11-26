@@ -58,16 +58,33 @@ export class Ball extends Component {
         // rigidBody.applyTorque(new Vec3(1, v, 1))
         rigidBody.applyImpulse(force, new Vec3(0, 0, 0));// 添加一个瞬间冲击力，
     }
-
+    private _prePos: Vec3 = null;
     update(deltaTime: number) {
         if (footBallGame.getGameState() === GameState.BallMoving) {
             if (this.rigidBody.isSleeping) {
-                footBallGame.failed()
+                footBallGame.setGameFinish()
+                tween().target(this).delay(0).call(() => {
+                    footBallGame.failed()
+                }).start();
             } else {
                 if (FootBallGameData.enabledBanana) {
-                    // 运动的过程中施加一个瞬时力来实现香蕉球，方向为人与球方向的法线
-                    const v = FootBallGameData.getBananaVec()
-                    this.rigidBody.applyImpulse(v);
+                    let b = false;
+                    const curPos = this.node.getPosition();
+                    if (this._prePos) {
+
+                        const dis = Vec3.distance(this._prePos, curPos)
+                        if (dis > 0.0001) {
+                            b = true;
+                        }
+                        this._prePos = curPos
+                    } else {
+                        this._prePos = curPos
+                    }
+                    if (b) {
+                        // 运动的过程中施加一个瞬时力来实现香蕉球，方向为人与球方向的法线
+                        const v = FootBallGameData.getBananaVec()
+                        this.rigidBody.applyImpulse(v);
+                    }
                 }
             }
         } else {

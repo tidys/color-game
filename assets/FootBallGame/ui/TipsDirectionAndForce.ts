@@ -13,13 +13,13 @@ export class TipsDirectionAndForce extends UIBase {
     private _func = null;
     start() {
         this._func = input.on(Input.EventType.TOUCH_START, () => {
-            this.node.removeFromParent()
+            this.node.destroy()
         })
         const cfg = footBallGame.getLevelConfig();
         this.text.string = cfg.tips.scene.text;
     }
     onDestroy() {
-        input.off(this._func)
+        input.off(Input.EventType.TOUCH_START, this._func)
     }
 
 }

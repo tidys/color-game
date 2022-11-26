@@ -9,18 +9,17 @@ export class UIGame extends UIBase {
     @property(Label)
     text: Label = null
 
-    private _func = null;
     onLoad() {
         game.on(Msg.UpdateForce, (num?: number) => {
             this._updateForce(num)
-        })
+        }, this)
         game.on(Msg.ResetGame, () => {
             this._updateForce(0)
-        })
+        }, this)
         this._updateForce(0)
     }
-    onDesstroy() {
-        game.off(this._func)
+    onDestroy() {
+        game.targetOff(this)
     }
 
     _updateForce(v) {

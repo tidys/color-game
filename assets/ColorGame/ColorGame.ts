@@ -105,7 +105,7 @@ export class ColorGame extends Component {
         let finishTips = () => {
             input.off(Input.EventType.TOUCH_START, finishTips);
             node.off(Input.EventType.TOUCH_START, finishTips)
-            node.removeFromParent()
+            node.destroy()
             cb();
         };
         input.on(Input.EventType.TOUCH_START, finishTips);

@@ -55,7 +55,7 @@ export class UI extends Component {
     }
     private _cleanUI() {
         if (this.curUINode) {
-            this.curUINode.destroyAllChildren();
+            this.curUINode.destroy();
             this.curUINode = null;
         }
     }
