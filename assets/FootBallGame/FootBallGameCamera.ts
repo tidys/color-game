@@ -1,4 +1,5 @@
 import { _decorator, Component, Node, input, Input, KeyCode, EventKeyboard, Enum, Vec2, EventMouse, UITransform, Quat, TERRAIN_HEIGHT_BASE, Vec3, tween, randomRange, Camera } from 'cc';
+import { footBallGame } from './FootBallGame';
 const { ccclass, property } = _decorator;
 
 enum Horizontal {
@@ -38,6 +39,10 @@ export class GameCamera extends Component {
     getCamera() {
         return this.node.getComponent(Camera);
     }
+    updateCamera(pos: Vec3, rotation: Quat) {
+        this.node.setPosition(pos);
+        this.node.setRotation(rotation);
+    }
     start() {
         input.on(Input.EventType.KEY_DOWN, (event: EventKeyboard) => {
             if (event.keyCode === KeyCode.KEY_W) {
@@ -64,8 +69,11 @@ export class GameCamera extends Component {
                     console.log("摄像机功能启用")
                 } else {
                     console.log("摄像机功能禁用")
-
                 }
+                footBallGame.isDesign = this.enabledFunc;
+            } else if (event.keyCode === KeyCode.KEY_E) {
+                console.log("postion: ", this.node.getPosition());
+                console.log("rotation: ", this.node.getRotation());
             }
         })
         input.on(Input.EventType.KEY_UP, (event: EventKeyboard) => {

@@ -1,7 +1,8 @@
-import { _decorator, Component, Node, input, Camera, Vec3, Input, EventKeyboard, KeyCode, game, PlaneCollider, Prefab, PhysicsSystem, geometry, instantiate, EventTouch, Vec2, tween, view, setDisplayStats } from 'cc';
+import { _decorator, Component, Node, input, Camera, Vec3, Input, EventKeyboard, KeyCode, game, PlaneCollider, Prefab, PhysicsSystem, geometry, instantiate, EventTouch, Vec2, tween, view, setDisplayStats, QuadRenderData, Quat } from 'cc';
 import { footBallGame } from './FootBallGame';
 import { GameCamera } from './FootBallGameCamera';
 import { FootBallGameData } from './FootBallGameData';
+import { ILevelConfig } from './LevelData';
 import { Ball } from './logic/Ball';
 import { Role, Team, Type } from './logic/Role'
 import { RoleBlock } from './logic/RoleBlock';
@@ -47,7 +48,7 @@ export class SceneComponent extends Component {
 
         // game.emit(Msg.ShowKicking);
         // game.emit(Msg.ShowUI, { type: UIType.WellCome } as UIOptions)
-        game.emit(Msg.EnterLevel, 3)
+        game.emit(Msg.EnterLevel, 10)
     }
     onLoad() {
         this.sceneRootNode = this.node.parent;
@@ -77,7 +78,22 @@ export class SceneComponent extends Component {
         })
         game.on(Msg.EnterLevel, (levelID?: number) => {
             footBallGame.setLevelID(levelID);
-            const cfg = footBallGame.getLevelConfig();
+            let cfg = footBallGame.getLevelConfig();
+            // 默认配置
+            let defaultCfg: ILevelConfig = {
+                id: 0, keeper: false,
+                camera: {
+                    pos: new Vec3(-25, 8, 0),
+                    rotation: new Quat(0.19, -0.68, -0.196, -0.67)
+                },
+                ball: { position: new Vec3(-40, 1, 0) }
+            };
+            cfg = Object.assign(defaultCfg, cfg)
+
+            // 球和人
+            this.ball.resetPosition();
+            this.role.resetWithPos(this.ball.node.getPosition(), this.door.getPosition())
+
             // 守门员
             if (cfg.keeper) {
                 this._createKeeper();
@@ -91,6 +107,9 @@ export class SceneComponent extends Component {
                     const item = cfg.block.pos[i];
                     this._createBolck(item)
                 }
+            }
+            if (cfg.camera) {
+                this.gameCamera.updateCamera(cfg.camera.pos, cfg.camera.rotation)
             }
             game.emit(Msg.CleanUI);
             // 场景提示
@@ -161,23 +180,29 @@ export class SceneComponent extends Component {
         this.keeper.init(Type.Keeper, Team.Blue);
     }
     private touchToEnsureDirection(event: EventTouch) {
+        if (footBallGame.isDesign) {
+            return
+        }
         this.role.rigidBodyStatic();
         let ray = new geometry.Ray();
         this.gameCamera.getCamera().screenPointToRay(event.getLocationX(), event.getLocationY(), ray);
 
-        if (PhysicsSystem.instance.raycastClosest(ray)) {
-            let result = PhysicsSystem.instance.raycastClosestResult;
-            if (result.collider === this.spaceCollider) {
-                let arrow = instantiate(this.arrowPrefab);
-                arrow.forward = new Vec3(0, 0, -1);
-                arrow.setScale(1, 1, 1);
-                arrow.worldPosition = new Vec3(this.ball.node.worldPosition.x, 0.001, this.ball.node.worldPosition.z);
-                this.node.parent.addChild(arrow);
-                this.arrowNode = arrow;
+        if (PhysicsSystem.instance.raycast(ray)) {
+            let results = PhysicsSystem.instance.raycastResults;
+            for (let i = 0; i < results.length; i++) {
+                let result = results[i]
+                if (result.collider === this.spaceCollider) {
+                    let arrow = instantiate(this.arrowPrefab);
+                    arrow.forward = new Vec3(0, 0, -1);
+                    arrow.setScale(1, 1, 1);
+                    arrow.worldPosition = new Vec3(this.ball.node.worldPosition.x, 0.001, this.ball.node.worldPosition.z);
+                    this.node.parent.addChild(arrow);
+                    this.arrowNode = arrow;
 
-                this.updateArrowForward(event);
-                input.off(Input.EventType.TOUCH_START, this.touchToEnsureDirection, this);
-                this.onTipsDirection();
+                    this.updateArrowForward(event);
+                    input.off(Input.EventType.TOUCH_START, this.touchToEnsureDirection, this);
+                    this.onTipsDirection();
+                }
             }
         }
     }
@@ -203,7 +228,7 @@ export class SceneComponent extends Component {
                     this.arrowNode.setScale(scale);
                     this.role.arroundBall(this.ball.node.getPosition(), result.hitPoint)
                     FootBallGameData.Force = distance;
-                    game.emit(Msg.UpdateForce, FootBallGameData.Force);
+                    game.emit(Msg.UpdateForce, FootBallGameData.getCalcForce());
                     FootBallGameData.Direction = this.arrowNode.forward;
                 }
             }

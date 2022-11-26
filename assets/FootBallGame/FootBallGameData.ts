@@ -30,14 +30,17 @@ export class FootBallGameData {
         y = Math.max(0.3, y);
         return y;
     }
-    static getShortForce() {
-        let y = this.getJump();
-        let force = new Vec3(this.Direction.x, y, this.Direction.z);
-        let process = this.Force / 10;
+    static getCalcForce() {
+        let process = this.Force / 5;
         if (process >= 1) {
             process = 1;
         }
-        const scalar = lerp(20, 200, process)
+        return lerp(20, 200, process)
+    }
+    static getShortForce() {
+        let y = this.getJump();
+        let force = new Vec3(this.Direction.x, y, this.Direction.z);
+        const scalar = this.getCalcForce()
         force.normalize().multiplyScalar(scalar);
         return force;
     }

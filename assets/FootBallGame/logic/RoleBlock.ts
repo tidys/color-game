@@ -24,11 +24,13 @@ export class RoleBlock extends Role {
 
     }
     initWithPostion(pos: Vec3, rolePos: Vec3) {
+        console.log(rolePos)
         const p = new Vec3(pos.x, this.height / 2, pos.z);
         this.node.setPosition(p);
 
         // 这里模型有点问题，z轴反了
         let forward = pos.clone().subtract(rolePos.clone()).normalize()
+        forward.y = 0;
         this.node.forward = forward
     }
 }

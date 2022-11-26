@@ -10,6 +10,7 @@ export enum GameState {
     Result,
 }
 export class FootBallGame {
+    public isDesign = false;
     private ball: Ball = null;
     private camera: GameCamera = null;
     private _state: GameState = GameState.ReadyShoot;
