@@ -28,7 +28,7 @@ export interface ILevelConfig {
 }
 export const LevelConfigs: ILevelConfig[] = [
     {
-        id: 1, keeper: false, desc: "直线练习",
+        id: 1, keeper: false, desc: "直线",
         ball: { position: new Vec3(-40, 1, 0) },
         tips: {
             scene: {
@@ -57,7 +57,41 @@ export const LevelConfigs: ILevelConfig[] = [
         }
     },
     {
-        id: 3, keeper: false, desc: "挑射练习",
+        id: 3, keeper: false, desc: "右旋球",
+        block: {
+            pos: [new Vec3(-45, 0, 0)]
+        },
+        ball: { position: new Vec3(-40, 1, 0) },
+        tips: {
+            scene: {
+                text: "注意前方的球员"
+            },
+            ball: {
+                pos: new Vec2(-0.7, 0),
+                text: "点击球的左侧提出右旋球"
+            }
+        }
+    },
+
+    {
+        id: 4, keeper: false, desc: "香蕉球练习",
+        block: {
+            pos: [new Vec3(-43, 0, 0),
+            new Vec3(-46, 0, 1.5),
+            new Vec3(-46, 0, -1.5),
+                // new Vec3(-45, 0, 0),
+                // new Vec3(-45, 0, 0),
+            ]
+        },
+        ball: { position: new Vec3(-40, 1, 0) },
+        tips: {
+            scene: {
+                text: "注意前方的球员"
+            }
+        }
+    },
+    {
+        id: 8, keeper: false, desc: "挑射",
         block: {
             pos: [new Vec3(-45, 0, 0), new Vec3(-45, 0, -1), new Vec3(-45, 0, 1)]
         },
@@ -83,9 +117,15 @@ export const LevelConfigs: ILevelConfig[] = [
         }
     },
     {
-        id: 20, keeper: true,
+        id: 20, keeper: true, desc: "突破守门员和单个防线",
         block: {
-            pos: []
+            pos: [new Vec3(-45, 0, 0)]
+        }
+    },
+    {
+        id: 21, keeper: true, desc: "突破守门员和多个防线",
+        block: {
+            pos: [new Vec3(-45, 0, 0), new Vec3(-45, 0, -1), new Vec3(-45, 0, 1)]
         }
     }
 

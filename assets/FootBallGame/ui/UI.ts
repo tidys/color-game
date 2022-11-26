@@ -1,4 +1,4 @@
-import { _decorator, Component, Node, Input, EventTouch, EventTarget, Slider, game, input, EventKeyboard, KeyCode, Camera, Prefab, instantiate, UITransform } from 'cc';
+import { _decorator, Component, Node, Input, EventTouch, EventTarget, Slider, game, input, EventKeyboard, KeyCode, Camera, Prefab, instantiate, UITransform, Vec3 } from 'cc';
 import { Msg } from '../Msg';
 const { ccclass, property } = _decorator;
 
@@ -43,30 +43,56 @@ export class UI extends Component {
         let prefab = cfg[data.type];
         if (prefab) {
             console.log(`UI: ${data.type}`)
-            this.node.destroyAllChildren();
-            const node = instantiate(prefab);
-            node.x = node.y = 0;
+            this._cleanUI()
+            const node: Node = instantiate(prefab);
+            node.setPosition(new Vec3())
+            this.curUINode = node;
             this.node.addChild(node);
+
         } else {
             console.log("未配置的界面：", data.type)
         }
     }
+    private _cleanUI() {
+        if (this.curUINode) {
+            this.curUINode.destroyAllChildren();
+            this.curUINode = null;
+        }
+    }
+    private gameUINode: Node = null;
+    private curUINode: Node = null;
+
+    private _visibleGameUI(b: boolean) {
+        if (!this.gameUINode) {
+            this.gameUINode = instantiate(this.gameUI);
+            this.gameUINode.setPosition(new Vec3());
+            this.node.addChild(this.gameUINode);
+        }
+        this.gameUINode.active = b;
+    }
     onLoad() {
+        this._visibleGameUI(false);
+        game.on(Msg.ExitGame, () => [
+            this._visibleGameUI(false)
+        ])
+        game.on(Msg.EnterGame, () => {
+            this._visibleGameUI(true);
+        })
         game.on(Msg.ResetGame, () => {
-            this._createUI({ type: UIType.Game })
+            this._visibleGameUI(true)
         })
         game.on(Msg.ShowUI, (data?: UIOptions) => {
             this._createUI(data);
         })
         game.on(Msg.CleanUI, () => {
-            this.node.destroyAllChildren()
+            this._cleanUI()
         })
         input.on(Input.EventType.KEY_DOWN, (event: EventKeyboard) => {
             if (event.keyCode === KeyCode.KEY_V) {
                 this.camera.node.active = !this.camera.node.active;
             }
         })
-        this.node.destroyAllChildren()
+        this._cleanUI()
     }
 
     update(deltaTime: number) {

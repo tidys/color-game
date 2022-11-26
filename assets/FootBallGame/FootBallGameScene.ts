@@ -70,6 +70,11 @@ export class SceneComponent extends Component {
                 this.ball.shoot()
             })
         })
+        game.on(Msg.ShowLevel, () => {
+            game.emit(Msg.ExitGame)
+            game.emit(Msg.ShowUI, { type: UIType.Level })
+
+        })
         game.on(Msg.EnterLevel, (levelID?: number) => {
             footBallGame.setLevelID(levelID);
             const cfg = footBallGame.getLevelConfig();
@@ -87,15 +92,17 @@ export class SceneComponent extends Component {
                     this._createBolck(item)
                 }
             }
+            game.emit(Msg.CleanUI);
             // 场景提示
             if (cfg.tips?.scene) {
                 game.emit(Msg.ShowUI, { type: UIType.TipsDirectionAndForce });
             }
             footBallGame.reset()
+            game.emit(Msg.EnterGame);
         })
         game.on(Msg.ShootingIn, () => {
             tween().target(this).delay(1).call(() => {
-                game.emit(Msg.ShowUI, { type: UIType.Level })
+                game.emit(Msg.ShowLevel);
             }).start()
         })
         this._initShortKey()
@@ -196,6 +203,7 @@ export class SceneComponent extends Component {
                     this.arrowNode.setScale(scale);
                     this.role.arroundBall(this.ball.node.getPosition(), result.hitPoint)
                     FootBallGameData.Force = distance;
+                    game.emit(Msg.UpdateForce, FootBallGameData.Force);
                     FootBallGameData.Direction = this.arrowNode.forward;
                 }
             }
@@ -213,7 +221,6 @@ export class SceneComponent extends Component {
                 this.arrowNode = null;
             }
             this.role.rigidBodyDynamic();
-
             // 显示踢小球的哪个部分界面
             game.emit(Msg.ShowUI, { type: UIType.Kicking } as UIOptions);
             // game.emit(Msg.GotoShoot);

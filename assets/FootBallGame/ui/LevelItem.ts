@@ -22,10 +22,11 @@ export class LevelItem extends Component {
     initData(index, id) {
         this.levelID = id;
         const cfg = getLevelConfig(id);
+        const head = `第${index.toString()}关`
         if (cfg && cfg.desc) {
-            this.text.string = `${index.toString()}:${cfg.desc}`
+            this.text.string = `${head}:${cfg.desc}`
         } else {
-            this.text.string = index.toString()
+            this.text.string = head;
         }
         // this.text.string = this.levelID.toString();
     }
