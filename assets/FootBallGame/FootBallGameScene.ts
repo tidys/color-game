@@ -4,8 +4,10 @@ import { GameCamera } from './FootBallGameCamera';
 import { FootBallGameData } from './FootBallGameData';
 import { Ball } from './logic/Ball';
 import { Role, Team, Type } from './logic/Role'
+import { RoleBlock } from './logic/RoleBlock';
 import { RoleKeeper } from './logic/RoleKeeper';
 import { Msg } from './Msg';
+import { TipsDirectionAndForce } from './ui/TipsDirectionAndForce';
 import { UIOptions, UIType } from './ui/UI';
 
 const { ccclass, property } = _decorator;
@@ -19,6 +21,7 @@ export class SceneComponent extends Component {
     role: Role = null;
 
     keeper: RoleKeeper = null;
+    blocks: RoleBlock[] = [];
 
     @property({ type: Node, displayName: "球门" })
     door: Node = null;
@@ -43,7 +46,8 @@ export class SceneComponent extends Component {
         footBallGame.setMainCamera(this.gameCamera);
 
         // game.emit(Msg.ShowKicking);
-        game.emit(Msg.ShowUI, { type: UIType.WellCome } as UIOptions)
+        // game.emit(Msg.ShowUI, { type: UIType.WellCome } as UIOptions)
+        game.emit(Msg.EnterLevel, 3)
     }
     onLoad() {
         this.sceneRootNode = this.node.parent;
@@ -67,6 +71,7 @@ export class SceneComponent extends Component {
             })
         })
         game.on(Msg.EnterLevel, (levelID?: number) => {
+            footBallGame.setLevelID(levelID);
             const cfg = footBallGame.getLevelConfig();
             // 守门员
             if (cfg.keeper) {
@@ -74,6 +79,15 @@ export class SceneComponent extends Component {
             } else {
                 this._removeKeeper()
             }
+            // 阻挡的队员
+            this._removeBlocks()
+            if (cfg.block) {
+                for (let i = 0; i < cfg.block.pos.length; i++) {
+                    const item = cfg.block.pos[i];
+                    this._createBolck(item)
+                }
+            }
+            // 场景提示
             if (cfg.tips?.scene) {
                 game.emit(Msg.ShowUI, { type: UIType.TipsDirectionAndForce });
             }
@@ -109,6 +123,23 @@ export class SceneComponent extends Component {
             this.keeper.node.removeFromParent();
             this.keeper = null;
         }
+    }
+    private _removeBlocks() {
+        for (let i = 0; i < this.blocks.length; i++) {
+            const block = this.blocks[i];
+            block.node.removeFromParent()
+        }
+        this.blocks = []
+    }
+    private _createBolck(pos: Vec3) {
+        const node = instantiate(this.rolePrefab);
+        let script = node.getComponent(RoleBlock)
+        if (!script) {
+            script = node.addComponent(RoleBlock)
+        }
+        this.sceneRootNode.addChild(node);
+        script.initWithPostion(pos, this.role.node.getPosition())
+        this.blocks.push(script)
     }
     private _createKeeper() {
         if (!this.keeper) {

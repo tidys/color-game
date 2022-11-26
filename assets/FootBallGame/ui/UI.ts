@@ -8,6 +8,7 @@ export enum UIType {
     GM = "GM",
     Level = "Level",
     WellCome = "WellCome",
+    Game = "Game",
 }
 export interface UIOptions {
     type: UIType,
@@ -29,24 +30,33 @@ export class UI extends Component {
     @property({ type: Prefab, displayName: "欢迎页面" })
     wellCome: Prefab = null;
 
+    @property({ type: Prefab, displayName: "游戏内UI" })
+    gameUI: Prefab = null;
+    private _createUI(data?: UIOptions) {
+        const cfg = {};
+        cfg[UIType.Game] = this.gameUI;
+        cfg[UIType.WellCome] = this.wellCome;
+        cfg[UIType.GM] = null;
+        cfg[UIType.Level] = this.levelPrefab;
+        cfg[UIType.Kicking] = this.ballNode;
+        cfg[UIType.TipsDirectionAndForce] = this.tipsNode;
+        let prefab = cfg[data.type];
+        if (prefab) {
+            console.log(`UI: ${data.type}`)
+            this.node.destroyAllChildren();
+            const node = instantiate(prefab);
+            node.x = node.y = 0;
+            this.node.addChild(node);
+        } else {
+            console.log("未配置的界面：", data.type)
+        }
+    }
     onLoad() {
+        game.on(Msg.ResetGame, () => {
+            this._createUI({ type: UIType.Game })
+        })
         game.on(Msg.ShowUI, (data?: UIOptions) => {
-            const cfg = {};
-            cfg[UIType.WellCome] = this.wellCome;
-            cfg[UIType.GM] = null;
-            cfg[UIType.Level] = this.levelPrefab;
-            cfg[UIType.Kicking] = this.ballNode;
-            cfg[UIType.TipsDirectionAndForce] = this.tipsNode;
-            let prefab = cfg[data.type];
-            if (prefab) {
-                console.log(`UI: ${data.type}`)
-                this.node.destroyAllChildren();
-                const node = instantiate(prefab);
-                node.x = node.y = 0;
-                this.node.addChild(node);
-            } else {
-                console.log("未配置的界面：", data.type)
-            }
+            this._createUI(data);
         })
         game.on(Msg.CleanUI, () => {
             this.node.destroyAllChildren()

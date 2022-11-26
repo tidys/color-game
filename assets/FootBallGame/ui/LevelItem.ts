@@ -1,5 +1,6 @@
 import { _decorator, Component, Node, Label, Input, game } from 'cc';
 import { footBallGame } from '../FootBallGame';
+import { getLevelConfig } from '../LevelData';
 import { Msg } from '../Msg';
 const { ccclass, property } = _decorator;
 
@@ -11,8 +12,6 @@ export class LevelItem extends Component {
     private levelID: number = null;
     start() {
         this.node.on(Input.EventType.TOUCH_END, () => {
-            game.emit(Msg.CleanUI);
-            footBallGame.setLevelID(this.levelID);
             game.emit(Msg.EnterLevel, this.levelID);
         })
     }
@@ -22,8 +21,13 @@ export class LevelItem extends Component {
     }
     initData(index, id) {
         this.levelID = id;
+        const cfg = getLevelConfig(id);
+        if (cfg && cfg.desc) {
+            this.text.string = `${index.toString()}:${cfg.desc}`
+        } else {
+            this.text.string = index.toString()
+        }
         // this.text.string = this.levelID.toString();
-        this.text.string = index.toString()
     }
 }
 

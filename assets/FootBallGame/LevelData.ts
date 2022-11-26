@@ -28,7 +28,7 @@ export interface ILevelConfig {
 }
 export const LevelConfigs: ILevelConfig[] = [
     {
-        id: 1, keeper: false,
+        id: 1, keeper: false, desc: "直线练习",
         ball: { position: new Vec3(-40, 1, 0) },
         tips: {
             scene: {
@@ -41,12 +41,15 @@ export const LevelConfigs: ILevelConfig[] = [
         }
     },
     {
-        id: 2, keeper: false,
+        id: 2, keeper: false, desc: "左旋球",
         block: {
-            pos: []
+            pos: [new Vec3(-45, 0, 0)]
         },
         ball: { position: new Vec3(-40, 1, 0) },
         tips: {
+            scene: {
+                text: "注意前方的球员"
+            },
             ball: {
                 pos: new Vec2(0.7, 0),
                 text: "点击球的右侧提出左旋球"
@@ -54,9 +57,9 @@ export const LevelConfigs: ILevelConfig[] = [
         }
     },
     {
-        id: 3, keeper: false,
+        id: 3, keeper: false, desc: "挑射练习",
         block: {
-            pos: []
+            pos: [new Vec3(-45, 0, 0), new Vec3(-45, 0, -1), new Vec3(-45, 0, 1)]
         },
         tips: {
             scene: {
@@ -72,7 +75,7 @@ export const LevelConfigs: ILevelConfig[] = [
     // 长距离挑射
 
     {
-        id: 10, keeper: true,
+        id: 10, keeper: true, desc: "守门员练习",
         tips: {
             scene: {
                 text: '注意躲避守门员'
