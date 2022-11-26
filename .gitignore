@@ -24,3 +24,4 @@ node_modules/
 /hot-update-tools/
 /extensions/
 *.DS_Store
+.DS_Store
